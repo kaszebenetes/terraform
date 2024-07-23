@@ -6,7 +6,7 @@ variable "region" {
 variable "tags" {
   type = map(string)
   default = {
-      Name  = "tf-shared-services"
-      Environment = "prod"
-    }
+    Name        = "tf-shared-services"
+    Environment = "prod"
+  }
 }
