@@ -9,11 +9,11 @@ resource "azurerm_network_interface" "vm-nic-web1" {
   }
 }
 
-resource "azurerm_linux_virtual_machine" "vm-linux_web1" {
+resource "azurerm_linux_virtual_machine" "vm-linux-web1" {
   name                = "tf-vm-linux-web1"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  size                = "Standard_B2ats_v2"
+  size                = "Standard_B1s"
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.vm-nic-web1.id
