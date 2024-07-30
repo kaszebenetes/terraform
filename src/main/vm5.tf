@@ -45,6 +45,10 @@ resource "azurerm_linux_virtual_machine" "vm-linux-bastion" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+  boot_diagnostics {
+    storage_account_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
+
+  }
 }
 
 # # Standard_B2ats_v2
