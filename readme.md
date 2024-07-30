@@ -15,4 +15,8 @@ terraform plan
 terraform apply
 
 terraform destroy
+
+terraform validate
+
+terraform fmt -recursive .
 ```

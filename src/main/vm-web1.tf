@@ -41,5 +41,22 @@ resource "azurerm_linux_virtual_machine" "vm-linux-web1" {
   }
 }
 
+resource "azurerm_virtual_machine_extension" "vm-linux-web-1-sh" {
+  name                 = "vm-linux-web-1-sh"
+  virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux-web1.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  protected_settings = <<PROT
+    {
+        "script": "${base64encode(file("files/user_add.sh"))}"
+    }
+    PROT
+
+
+  tags = var.tags
+}
+
 # # Standard_B2ats_v2
 # count.index <= 1?  0 : default = count.index

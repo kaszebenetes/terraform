@@ -51,5 +51,22 @@ resource "azurerm_linux_virtual_machine" "vm-linux-bastion" {
   }
 }
 
+resource "azurerm_virtual_machine_extension" "vm-linux-bastion-sh" {
+  name                 = "vm-linux-bastion-sh"
+  virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux-bastion.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
+
+  protected_settings = <<PROT
+    {
+        "script": "${base64encode(file("files/user_add.sh"))}"
+    }
+    PROT
+
+
+  tags = var.tags
+}
+
 # # Standard_B2ats_v2
 # count.index <= 1?  0 : default = count.index
