@@ -10,3 +10,7 @@ variable "tags" {
     Environment = "prod"
   }
 }
+variable "boot_diagnostics_sa_type" {
+  description = "(Optional) Storage account type for boot diagnostics"
+  default     = "Standard_LRS"
+}
