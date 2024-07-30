@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# logs: /var/lib/waagent/custom-script/download/0/stdout
+
 # USER_NAME=test_user
 # PASSWORD=test_pass
 
