@@ -20,6 +20,7 @@ all:
                 ansible_user: adminuser
                 ansible_ssh_private_key_file: "~/.ssh/terraform_project/id_rsa"
                 # ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q adminuser@51.145.9.58"'
+                haproxy_config: "/etc/haproxy/haproxy.cfg"
               children:
                 webservers:
                   hosts:

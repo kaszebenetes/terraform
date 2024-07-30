@@ -1,0 +1,8 @@
+frontend haproxy-main
+        bastion *:80
+        mode http
+        default_backend webservers
+backend webservers
+        balance roundrobin
+        server web-1 10.0.0.4:80 check
+        server web-2 10.0.0.5:80 check

@@ -4,7 +4,7 @@
     # src: "{{ playbook_dir }}/vms/web_config/index.txt"
     # content: |
     #   this is text which will be copied over to the destination file
-    src: index.html.j2
+    src: index.nginx-debian.html
     dest: "{{ nginx_index_path }}"
     # remote_src: false
   register: index_file

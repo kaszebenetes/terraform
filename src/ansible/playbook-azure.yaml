@@ -23,11 +23,6 @@
     # - debug:
     #     var: hostvars[inventory_hostname]
 
-    - name: Install the latest version repository epel-release
-      ansible.builtin.apt:
-        name: epel-release
-        state: latest
-
     - name: Install the latest version of Haproxy
       ansible.builtin.apt:
         name: haproxy
@@ -38,17 +33,24 @@
         name: haproxy
         state: started
 
-    - name: Inserting content of index.html
-      ansible.builtin.copy:
-        content: ./lb_config/haproxy.txt
+    - name: Haproxy config setting up
+      ansible.builtin.template:
+        src: ./vms/lb_config/haproxy.j2
         dest: "{{ haproxy_config }}"
-      when: " './../vms/lb_config/haproxy.txt' != '{{ haproxy_config }}'"
+      register: haproxy_file
+      notify:
+          - Restarting harpoxy service
 
-    - name: Restarting Haproxy service, if config file has been changed
+    - name: Firewall rules are setting..
+      ansible.builtin.script: ./vms/lb_config/firewall.sh
+
+  handlers:
+    - name: Restarting harpoxy service
       systemd:
-        name: haproxy
+        name: nginx
         state: restarted
-      when: "{{ haproxy_config }}.changed"
+
+
 
 # - hosts: dnsservers
 #   gather_facts: true
@@ -68,8 +70,8 @@
 #     - debug:
 #         msg: "Setting up firewall rules dns-servers.."
 
-#     - name: Firewall rules are setting..
-#       command: bash ./../vms/dns_config/firewall.sh
+    # - name: Firewall rules are setting..
+    #   ansible.builtin.script: .//vms/dns_config/firewall.sh
 
 - hosts: bastions
   gather_facts: true
@@ -81,13 +83,8 @@
     # - debug:
     #     var: hostvars[inventory_hostname]
 
-    - name: Install the latest version repository epel-release
-      ansible.builtin.apt:
-        name: epel-release
-        state: latest
-
     - debug:
         msg: "Setting up firewall rules dns-servers.."
 
     - name: Firewall rules are setting..
-      command: bash ./../vms/bastion_config/firewall.sh
+      ansible.builtin.script: ./vms/bastion_config/firewall.sh
