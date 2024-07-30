@@ -11,5 +11,5 @@
   notify:
     - Restarting nginx service
 
-- debug:
-    var: index_file
+# - debug:
+#     var: index_file

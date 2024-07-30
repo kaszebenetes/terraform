@@ -7,7 +7,7 @@ set -x
 systemctl stop firewalld
 systemctl disable firewalld
 systemctl mask firewalld
-sudo apt-get install iptable
+sudo apt-get install iptables
 systemctl start iptables.service
 systemctl enable iptables.service
 
@@ -21,4 +21,4 @@ iptables -I OUTPUT -p udp --dport 53 -j ACCEPT
 iptables -A INPUT -j DROP
 iptables -A OUTPUT -j DROP
 
-sudo bash -c "iptables-save > /etc/sysconfig/iptables"
+sudo bash -c "iptables-save > /etc/iptables"

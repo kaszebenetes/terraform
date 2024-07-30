@@ -19,4 +19,6 @@ terraform destroy
 terraform validate
 
 terraform fmt -recursive .
+
+ansible-playbook -i inventories/inventory-azure.yaml playbook-azure.yaml
 ```

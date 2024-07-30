@@ -1,6 +1,5 @@
 ---
-handlers:
-    - name: Restarting harpoxy service
-      systemd:
-        name: nginx
-        state: restarted
+- name: Restarting harpoxy service
+  systemd:
+    name: haproxy
+    state: restarted
