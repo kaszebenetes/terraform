@@ -1,0 +1,6 @@
+---
+handlers:
+    - name: Restarting harpoxy service
+      systemd:
+        name: nginx
+        state: restarted

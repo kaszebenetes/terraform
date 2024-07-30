@@ -8,5 +8,5 @@
 
 - import_tasks: service.yaml
 
-- name: Firewall rules are setting..
-  ansible.builtin.script: ./vms/web_config/firewall.sh
+# - name: Firewall rules are setting..
+#   ansible.builtin.script: ./vms/web_config/firewall.sh

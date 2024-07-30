@@ -1,0 +1,18 @@
+---
+- name: Install the latest version of Haproxy
+  ansible.builtin.apt:
+        name: haproxy
+        state: latest
+
+- name: Starting haproxy service, if it's not started
+  ansible.builtin.service:
+    name: haproxy
+    state: started
+
+- name: Haproxy config setting up
+  ansible.builtin.template:
+    src: haproxy.j2
+    dest: "{{ haproxy_config }}"
+  register: haproxy_file
+  notify:
+      - Restarting harpoxy service
