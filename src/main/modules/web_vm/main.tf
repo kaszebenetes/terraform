@@ -1,22 +1,23 @@
-resource "azurerm_network_interface" "vm-nic-web2" {
-  name                = "vm-nic-web2"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+resource "azurerm_network_interface" "vm-nic-web" {
+  name                = var.nic_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet[0].id
-    private_ip_address_allocation = "Dynamic"
+    name                          = var.type_of_nic
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = var.ip_allocation
+    private_ip_address            = var.private_ip_address
   }
 }
 
-resource "azurerm_linux_virtual_machine" "vm-linux-web2" {
-  name                = "tf-vm-linux-web2"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1s"
+resource "azurerm_linux_virtual_machine" "vm-linux-web" {
+  name                = var.vm_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  size                = var.vm_size
   admin_username      = "adminuser"
   network_interface_ids = [
-    azurerm_network_interface.vm-nic-web2.id
+    azurerm_network_interface.vm-nic-web.id
   ]
 
   admin_ssh_key {
@@ -41,9 +42,9 @@ resource "azurerm_linux_virtual_machine" "vm-linux-web2" {
   }
 }
 
-resource "azurerm_virtual_machine_extension" "vm-linux-web-2-sh" {
-  name                 = "vm-linux-web-2-sh"
-  virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux-web2.id
+resource "azurerm_virtual_machine_extension" "vm-linux-web-sh" {
+  name                 = var.ext_name
+  virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux-web.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
   type_handler_version = "2.0"
@@ -55,7 +56,6 @@ resource "azurerm_virtual_machine_extension" "vm-linux-web-2-sh" {
     PROT
 
 
-  tags = var.tags
 }
 
 # # Standard_B2ats_v2

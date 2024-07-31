@@ -12,7 +12,7 @@
   become: true
   roles:
     - nginx
-
+  # - iptables
 
 - hosts: loadbalancers
   gather_facts: true
@@ -25,6 +25,7 @@
 
   roles:
     - haproxy
+    # - iptables
 
 
 # - hosts: dnsservers
@@ -61,5 +62,5 @@
     - debug:
         msg: "Setting up firewall rules dns-servers.."
 
-  roles:
-    - iptables
+  # roles:
+  #   - iptables

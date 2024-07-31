@@ -1,29 +1,30 @@
 resource "azurerm_public_ip" "vm-pip-lb" {
-  name                = "tf-vm-nic-pip-lb"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  allocation_method   = "Static"
+  name                = var.pip_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  allocation_method   = var.allocation_method
 
   tags = var.tags
 }
 
 resource "azurerm_network_interface" "vm-nic-lb" {
-  name                = "vm-nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  name                = var.nic_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet[1].id
+    name                          = var.type_of_nic
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = var.ip_allocation
+    private_ip_address            = var.private_ip_address
     public_ip_address_id          = azurerm_public_ip.vm-pip-lb.id
-    private_ip_address_allocation = "Dynamic"
   }
 }
 
 resource "azurerm_linux_virtual_machine" "vm-linux-lb" {
-  name                = "tf-vm-linux-lb"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = "Standard_B2ats_v2"
+  name                = var.vm_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  size                = var.vm_size
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.vm-nic-lb.id
@@ -66,7 +67,6 @@ resource "azurerm_virtual_machine_extension" "vm-linux-lb-sh" {
     PROT
 
 
-  tags = var.tags
 }
 
 # # Standard_B2ats_v2
