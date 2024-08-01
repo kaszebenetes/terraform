@@ -6,9 +6,9 @@ variable "tags" {
   }
 }
 variable "vm_name" {
-  description = "Prefix for the VM names"
+  description = "Name of the VM"
   type        = string
-  default     = "vm-linux_web"
+  default     = "vm-linux_lb"
 }
 
 variable "resource_group_name" {
@@ -27,22 +27,21 @@ variable "vm_size" {
   default     = "Standard_B1s"
 }
 
-variable "ssh_public_key_path" {
-  description = "Path to the SSH public key"
-  type        = string
-  default     = "files/id_rsa.pub"
-}
-
 variable "type_of_nic" {
   description = "Type of NIC"
   type        = string
   default     = "internal"
 }
 
-variable "nic_name" {
-  description = "Prefix for the NIC names"
+variable "boot_diagnostics_st_uri" {
+  description = "Boot diagnostic Storage account"
   type        = string
-  default     = "vm-nic-web"
+}
+
+variable "nic_name" {
+  description = "Name of the NIC"
+  type        = string
+  default     = "vm-nic-lb"
 }
 
 variable "ip_allocation" {
@@ -52,8 +51,9 @@ variable "ip_allocation" {
 }
 
 variable "private_ip_address" {
-  description = "Base IP address for the private IPs"
+  description = "Private IP address for the NIC"
   type        = string
+  default     = "10.0.1.4"
 }
 
 variable "subnet_id" {
@@ -61,13 +61,26 @@ variable "subnet_id" {
   type        = string
 }
 
-variable "ext_name" {
-  description = "Prefix for the extension names"
+variable "pip_name" {
+  description = "Name of the public IP"
   type        = string
-  default     = "vm-linux-web"
+  default     = "tf-vm-nic-pip"
 }
 
-variable "boot_diagnostics_st_uri" {
-  description = "Boot diagnostic Storage account"
+variable "allocation_method" {
+  description = "IP allocation method for the public IP"
   type        = string
+  default     = "Static"
+}
+
+variable "ext_name" {
+  description = "Type name of Vm extension"
+  type        = string
+  default     = "Static"
+}
+
+variable "pip_enabled" {
+  description = "Type name of Vm extension"
+  type        = bool
+  default     = false
 }

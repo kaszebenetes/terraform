@@ -29,7 +29,7 @@ module "subnet" {
 
 module "web_vm" {
   count  = 2
-  source = "./modules/web_vm"
+  source = "./modules/vm_linux"
   # Vm config --->
   vm_name             = "vm-linux-web${count.index + 1}"
   resource_group_name = azurerm_resource_group.rg.name
@@ -52,7 +52,7 @@ module "web_vm" {
 
 }
 module "web_lb" {
-  source = "./modules/web_lb"
+  source = "./modules/vm_linux"
   # Vm config --->
   vm_name             = "vm-linux-lb"
   resource_group_name = azurerm_resource_group.rg.name
@@ -67,6 +67,7 @@ module "web_lb" {
   subnet_id          = module.subnet[1].id
   # <---
   # PIP config  --->
+  pip_enabled       = true
   pip_name          = "tf-vm-nic-pip-lb"
   allocation_method = "Static"
   # <---
@@ -76,7 +77,7 @@ module "web_lb" {
 
 }
 module "bastion" {
-  source              = "./modules/bastion"
+  source              = "./modules/vm_linux"
   vm_name             = "vm-linux-bastion"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location

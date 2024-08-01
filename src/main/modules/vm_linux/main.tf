@@ -1,23 +1,11 @@
-resource "azurerm_network_interface" "vm-nic-web" {
-  name                = var.nic_name
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  ip_configuration {
-    name                          = var.type_of_nic
-    subnet_id                     = var.subnet_id
-    private_ip_address_allocation = var.ip_allocation
-    private_ip_address            = var.private_ip_address
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "vm-linux-web" {
+resource "azurerm_linux_virtual_machine" "vm-linux" {
   name                = var.vm_name
   resource_group_name = var.resource_group_name
   location            = var.location
   size                = var.vm_size
   admin_username      = "adminuser"
   network_interface_ids = [
-    azurerm_network_interface.vm-nic-web.id
+    azurerm_network_interface.vm-nic.id
   ]
 
   admin_ssh_key {
@@ -36,15 +24,38 @@ resource "azurerm_linux_virtual_machine" "vm-linux-web" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+
   boot_diagnostics {
     storage_account_uri = var.boot_diagnostics_st_uri
 
   }
 }
+resource "azurerm_public_ip" "vm-pip" {
+  count = var.pip_enabled ? 1 : 0
+  name                = var.pip_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  allocation_method   = var.allocation_method
 
-resource "azurerm_virtual_machine_extension" "vm-linux-web-sh" {
+  tags = var.tags
+}
+
+resource "azurerm_network_interface" "vm-nic" {
+  name                = var.nic_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  ip_configuration {
+    name                          = var.type_of_nic
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = var.ip_allocation
+    private_ip_address            = var.private_ip_address
+    public_ip_address_id          = var.pip_enabled ? azurerm_public_ip.vm-pip[0].id : null
+  }
+}
+
+resource "azurerm_virtual_machine_extension" "vm-linux-sh" {
   name                 = var.ext_name
-  virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux-web.id
+  virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
   type_handler_version = "2.0"
