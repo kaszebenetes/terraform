@@ -18,9 +18,10 @@ all:
             vms:
               vars:
                 bastion_pip: "4.234.153.157"
+                ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
                 ansible_user: adminuser
                 ansible_ssh_private_key_file: "~/.ssh/terraform_project/id_rsa"
-                ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q adminuser@{{ bastion_pip }}"'
+                ansible_ssh_common_args: '{{ ssh_common_args }} -o ProxyCommand="ssh {{ ssh_common_args }} -i {{ ansible_ssh_private_key_file }} -W %h:%p -q {{ ansible_user }}@{{ bastion_pip }}"'
               children:
                 webservers:
                   hosts:
