@@ -87,7 +87,7 @@ module "bastion" {
   # <---
   # PIP config  --->
   pip_enabled = true
-  pip_name = "tf-vm-nic-pip-bastion"
+  pip_name    = "tf-vm-nic-pip-bastion"
   # <---
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
