@@ -16,6 +16,6 @@ variable "boot_diagnostics_sa_type" {
 }
 
 variable "project_prefix" {
-  type = string
+  type    = string
   default = "kaszebenetes-tf-prod"
 }

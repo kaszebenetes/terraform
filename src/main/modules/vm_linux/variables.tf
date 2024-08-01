@@ -41,7 +41,7 @@ variable "boot_diagnostics_st_uri" {
 variable "nic_name" {
   description = "Name of the NIC"
   type        = string
-  default     = "vm-nic-lb"
+  default     = null
 }
 
 variable "ip_allocation" {
@@ -64,7 +64,7 @@ variable "subnet_id" {
 variable "pip_name" {
   description = "Name of the public IP"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "allocation_method" {
@@ -76,11 +76,15 @@ variable "allocation_method" {
 variable "ext_name" {
   description = "Type name of Vm extension"
   type        = string
-  default     = "Static"
+  default     = null
 }
 
 variable "pip_enabled" {
   description = "Type name of Vm extension"
   type        = bool
   default     = false
+}
+variable "project_prefix" {
+  type    = string
+  default = "kaszebenetes-tf-prod"
 }
