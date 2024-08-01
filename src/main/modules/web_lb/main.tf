@@ -1,4 +1,6 @@
 resource "azurerm_public_ip" "vm-pip-lb" {
+  count = var.pip_enabled ? 1 : 0
+
   name                = var.pip_name
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -16,7 +18,7 @@ resource "azurerm_network_interface" "vm-nic-lb" {
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = var.ip_allocation
     private_ip_address            = var.private_ip_address
-    public_ip_address_id          = azurerm_public_ip.vm-pip-lb.id
+    public_ip_address_id          = var.pip_enabled ? azurerm_public_ip.vm-pip-lb.id : null
   }
 }
 
