@@ -5,3 +5,6 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = var.address_prefixes
 
 }
+output "id" {
+  value = azurerm_subnet.subnet.id
+}

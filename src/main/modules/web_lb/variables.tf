@@ -33,6 +33,11 @@ variable "type_of_nic" {
   default     = "internal"
 }
 
+variable "boot_diagnostics_st_uri" {
+  description = "Boot diagnostic Storage account"
+  type        = string
+}
+
 variable "nic_name" {
   description = "Name of the NIC"
   type        = string

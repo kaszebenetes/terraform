@@ -1,8 +1,15 @@
-frontend haproxy-main
-        bastion *:80
-        mode http
-        default_backend webservers
-backend webservers
-        balance roundrobin
-        server web-1 10.0.0.4:80 check
-        server web-2 10.0.0.5:80 check
+defaults
+  mode http
+  timeout client 10s
+  timeout connect 5s
+  timeout server 10s
+  timeout http-request 10s
+
+frontend myfrontend
+  bind :80
+  default_backend myservers
+
+backend myservers
+  balance roundrobin
+  server web1 10.0.0.4:80
+  server web2 10.0.0.5:80

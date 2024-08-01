@@ -66,3 +66,8 @@ variable "ext_name" {
   type        = string
   default     = "vm-linux-web"
 }
+
+variable "boot_diagnostics_st_uri" {
+  description = "Boot diagnostic Storage account"
+  type        = string
+}
