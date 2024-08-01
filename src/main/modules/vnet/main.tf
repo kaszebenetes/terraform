@@ -6,6 +6,6 @@ resource "azurerm_virtual_network" "vnet" {
   # dns_servers         = var.dns_servers
 }
 
-output "vnet_name"{
+output "vnet_name" {
   value = azurerm_virtual_network.vnet.name
 }

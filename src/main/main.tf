@@ -18,7 +18,7 @@ module "vnet" {
 
 }
 module "subnet" {
-  count = 3
+  count               = 3
   source              = "./modules/subnet"
   name                = "tf-vnet-subnet-${count.index}"
   vnet_name           = module.vnet.vnet_name
@@ -28,23 +28,23 @@ module "subnet" {
 }
 
 module "web_vm" {
-  count = 2
-  source              = "./modules/web_vm"
+  count  = 2
+  source = "./modules/web_vm"
   # Vm config --->
-  vm_name             = "vm-linux-web${count.index+1}"
+  vm_name             = "vm-linux-web${count.index + 1}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   vm_size             = "Standard_B1s"
   # <---
   # NIC config --->
-  type_of_nic         = "internal"
-  nic_name            = "vm-nic-web${count.index}"
-  ip_allocation       = "Static"
-  private_ip_address  = "10.0.0.${count.index+4}"
-  subnet_id           = module.subnet[0].id
+  type_of_nic        = "internal"
+  nic_name           = "vm-nic-web${count.index}"
+  ip_allocation      = "Static"
+  private_ip_address = "10.0.0.${count.index + 4}"
+  subnet_id          = module.subnet[0].id
   # <---
   # Extension config --->
-  ext_name            = "vm-linux-web${count.index}-sh"
+  ext_name = "vm-linux-web${count.index}-sh"
   # <---
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
@@ -52,7 +52,7 @@ module "web_vm" {
 
 }
 module "web_lb" {
-  source              = "./modules/web_lb"
+  source = "./modules/web_lb"
   # Vm config --->
   vm_name             = "vm-linux-lb"
   resource_group_name = azurerm_resource_group.rg.name
@@ -60,15 +60,15 @@ module "web_lb" {
   vm_size             = "Standard_B2ats_v2"
   # <---
   # NIC config  --->
-  type_of_nic         = "internal"
-  nic_name            = "vm-nic-lb"
-  ip_allocation       = "Static"
-  private_ip_address  = "10.0.1.4"
-  subnet_id           = module.subnet[1].id
+  type_of_nic        = "internal"
+  nic_name           = "vm-nic-lb"
+  ip_allocation      = "Static"
+  private_ip_address = "10.0.1.4"
+  subnet_id          = module.subnet[1].id
   # <---
   # PIP config  --->
-  pip_name            = "tf-vm-nic-pip-lb"
-  allocation_method   = "Static"
+  pip_name          = "tf-vm-nic-pip-lb"
+  allocation_method = "Static"
   # <---
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
@@ -82,15 +82,15 @@ module "bastion" {
   location            = azurerm_resource_group.rg.location
   vm_size             = "Standard_B1s"
   # NIC config  --->
-  type_of_nic         = "internal"
-  nic_name            = "vm-nic-bastion"
-  ip_allocation       = "Static"
-  private_ip_address  = "10.0.2.4"
-  subnet_id           = module.subnet[2].id
+  type_of_nic        = "internal"
+  nic_name           = "vm-nic-bastion"
+  ip_allocation      = "Static"
+  private_ip_address = "10.0.2.4"
+  subnet_id          = module.subnet[2].id
   # <---
   # PIP config  --->
-  pip_name            = "tf-vm-nic-pip-bastion"
-  allocation_method   = "Static"
+  pip_name          = "tf-vm-nic-pip-bastion"
+  allocation_method = "Static"
   # <---
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
