@@ -86,6 +86,7 @@ module "bastion" {
   subnet_id          = module.subnet[2].id
   # <---
   # PIP config  --->
+  pip_enabled = true
   pip_name = "tf-vm-nic-pip-bastion"
   # <---
   # Bootdiagnostic--->
