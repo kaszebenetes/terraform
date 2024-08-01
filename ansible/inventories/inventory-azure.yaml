@@ -1,0 +1,47 @@
+---
+all:
+  vars:
+    ansible_user: adminuser
+    ansible_python_interpreter: /usr/bin/python3
+  children:
+    hypervisors:
+      children:
+        # desktophp:
+        #   hosts:
+        #     desktophp1:
+        #       ansible_host: 10.0.0.1
+        desktoppc:
+          hosts:
+            desktopfedora:
+              ansible_host: 10.0.0.1
+          children:
+            vms:
+              vars:
+                bastion_pip: "172.166.198.201"
+                ansible_user: adminuser
+                # ansible_ssh_private_key_file: "~/.ssh/terraform_project/id_rsa"
+                ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q adminuser@{{ bastion_pip }}"'
+              children:
+                webservers:
+                  hosts:
+                    web-1:
+                      # ssh_vagrant_hostname: web-1
+                      ansible_host: 10.0.0.4
+                    web-2:
+                      # ssh_vagrant_hostname: web-2
+                      ansible_host: 10.0.0.5
+                loadbalancers:
+                  hosts:
+                    web-lb:
+                      # ssh_vagrant_hostname: web-lb
+                      ansible_host: 10.0.1.4
+                # dnsservers:
+                #   hosts:
+                #     dns-1:
+                #       ssh_vagrant_hostname: dns-1
+                #       ansible_host: 10.0.0.23
+                bastions:
+                  hosts:
+                    bastion:
+                      # ssh_vagrant_hostname: bastion
+                      ansible_host: 10.0.2.4

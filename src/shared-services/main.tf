@@ -7,4 +7,5 @@ resource "azurerm_resource_group" "rg-tfstates" {
   location = var.region
 
   tags = var.tags
+
 }

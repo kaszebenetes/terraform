@@ -1,0 +1,66 @@
+---
+# - hosts: all
+#   gather_facts: true
+#   become: true
+#   tasks:
+#     - debug:
+#         var: hostvars[inventory_hostname]
+
+- name: "Provisioning web-servers.."
+  hosts: webservers
+  gather_facts: true
+  become: true
+  roles:
+    - nginx
+  # - iptables
+
+- hosts: loadbalancers
+  gather_facts: true
+  become: true
+  tasks:
+    - debug:
+        msg: "Provisioning load-balancers.."
+    # - debug:
+    #     var: hostvars[inventory_hostname]
+
+  roles:
+    - haproxy
+    # - iptables
+
+
+# - hosts: dnsservers
+#   gather_facts: true
+#   become: true
+#   tasks:
+
+#     - debug:
+#         msg: "Provisioning dns-servers.."
+#     # - debug:
+#     #     var: hostvars[inventory_hostname]
+
+#     - name: Install the latest version repository epel-release
+#       ansible.builtin.apt:
+#         name: epel-release
+#         state: latest
+
+#     - debug:
+#         msg: "Setting up firewall rules dns-servers.."
+
+    # - name: Firewall rules are setting..
+    #   ansible.builtin.script: .//vms/dns_config/firewall.sh
+
+- hosts: bastions
+  gather_facts: true
+  become: true
+  tasks:
+
+    - debug:
+        msg: "Provisioning bastions.."
+    # - debug:
+    #     var: hostvars[inventory_hostname]
+
+    - debug:
+        msg: "Setting up firewall rules dns-servers.."
+
+  # roles:
+  #   - iptables

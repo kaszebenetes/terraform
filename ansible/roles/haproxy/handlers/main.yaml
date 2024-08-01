@@ -1,0 +1,5 @@
+---
+- name: Restarting harpoxy service
+  systemd:
+    name: haproxy
+    state: restarted
