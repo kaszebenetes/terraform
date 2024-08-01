@@ -31,7 +31,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
   }
 }
 resource "azurerm_public_ip" "vm-pip" {
-  count = var.pip_enabled ? 1 : 0
+  count               = var.pip_enabled ? 1 : 0
   name                = var.pip_name
   resource_group_name = var.resource_group_name
   location            = var.location
