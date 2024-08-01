@@ -1,3 +1,7 @@
+locals {
+  pip_name = var.pip_name != null ? var.pip_name : "${var.vm_name}-pip"
+}
+
 resource "azurerm_linux_virtual_machine" "vm-linux" {
   name                = var.vm_name
   resource_group_name = var.resource_group_name
@@ -32,7 +36,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
 }
 resource "azurerm_public_ip" "vm-pip" {
   count               = var.pip_enabled ? 1 : 0
-  name                = var.pip_name
+  name                = local.pip_name
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = var.allocation_method

@@ -64,7 +64,7 @@ variable "subnet_id" {
 variable "pip_name" {
   description = "Name of the public IP"
   type        = string
-  default     = "tf-vm-nic-pip"
+  default = null
 }
 
 variable "allocation_method" {
