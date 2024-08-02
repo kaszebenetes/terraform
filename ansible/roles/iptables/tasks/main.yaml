@@ -1,3 +1,13 @@
 ---
-- name: Setting up iptables...
-  ansible.builtin.script: "{{ ansible_facts['nodename' ]}}.sh"
+- name: Creates directory
+  ansible.builtin.file:
+    path: /etc/sysconfig
+    state: directory
+
+- name: Inserting template of firewall rules
+  ansible.builtin.template:
+    src: "{{ ansible_facts['nodename'] }}.j2"
+    dest: "/etc/sysconfig/iptables"
+
+- name: Iptables load
+  ansible.builtin.shell: iptables-restore "/etc/sysconfig/iptables"
