@@ -5,7 +5,6 @@ variable "tags" {
 variable "name" {
   description = "Name of the VM"
   type        = string
-  default     = "vm-linux"
 }
 
 variable "resource_group_name" {
@@ -50,7 +49,6 @@ variable "ip_allocation" {
 variable "private_ip_address" {
   description = "Private IP address for the NIC"
   type        = string
-  default     = "10.0.1.4"
 }
 
 variable "subnet_id" {
@@ -81,7 +79,8 @@ variable "pip_enabled" {
   type        = bool
   default     = false
 }
-variable "project_prefix" {
-  type    = string
-  default = "kaszebenetes-tf-prod"
+
+variable "os_disk_size" {
+  type    = number
+  default = 32
 }
