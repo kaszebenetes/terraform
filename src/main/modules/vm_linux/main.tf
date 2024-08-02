@@ -1,9 +1,16 @@
+locals {
+  ext_name = var.ext_name != null ? var.ext_name : "${var.project_prefix}-ext-sh-${var.name}"
+  nic_name = var.nic_name != null ? var.nic_name : "${var.project_prefix}-nic-${var.name}"
+  pip_name = var.pip_name != null ? var.pip_name : "${var.project_prefix}-${var.name}-pip"
+}
+
 resource "azurerm_linux_virtual_machine" "vm-linux" {
-  name                = var.vm_name
+  name                = var.name
   resource_group_name = var.resource_group_name
   location            = var.location
   size                = var.vm_size
   admin_username      = "adminuser"
+
   network_interface_ids = [
     azurerm_network_interface.vm-nic.id
   ]
@@ -12,6 +19,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
     username   = "adminuser"
     public_key = file("files/id_rsa.pub")
   }
+
 
   os_disk {
     caching              = "ReadWrite"
@@ -29,10 +37,13 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
     storage_account_uri = var.boot_diagnostics_st_uri
 
   }
+
+  tags = var.tags
 }
+
 resource "azurerm_public_ip" "vm-pip" {
   count               = var.pip_enabled ? 1 : 0
-  name                = var.pip_name
+  name                = local.pip_name
   resource_group_name = var.resource_group_name
   location            = var.location
   allocation_method   = var.allocation_method
@@ -41,9 +52,10 @@ resource "azurerm_public_ip" "vm-pip" {
 }
 
 resource "azurerm_network_interface" "vm-nic" {
-  name                = var.nic_name
+  name                = local.nic_name
   resource_group_name = var.resource_group_name
   location            = var.location
+
   ip_configuration {
     name                          = var.type_of_nic
     subnet_id                     = var.subnet_id
@@ -51,10 +63,12 @@ resource "azurerm_network_interface" "vm-nic" {
     private_ip_address            = var.private_ip_address
     public_ip_address_id          = var.pip_enabled ? azurerm_public_ip.vm-pip[0].id : null
   }
+
+  tags = var.tags
 }
 
 resource "azurerm_virtual_machine_extension" "vm-linux-sh" {
-  name                 = var.ext_name
+  name                 = local.ext_name
   virtual_machine_id   = azurerm_linux_virtual_machine.vm-linux.id
   publisher            = "Microsoft.Azure.Extensions"
   type                 = "CustomScript"
@@ -66,7 +80,7 @@ resource "azurerm_virtual_machine_extension" "vm-linux-sh" {
     }
     PROT
 
-
+  tags = var.tags
 }
 
 # # Standard_B2ats_v2

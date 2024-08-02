@@ -6,10 +6,28 @@
 #     - debug:
 #         var: hostvars[inventory_hostname]
 
+- name: "Catch bastion ip from terraform"
+  hosts: localhost
+  gather_facts: false
+  become: false
+  tasks:
+    - name: "Execute terraform output"
+      shell: terraform output -raw bastion_pip
+      args:
+        chdir: "../src/main"
+      register: tf_output
+    - name: "Set bastion_pip var"
+      set_fact:
+        bastion_pip: "{{ tf_output.stdout }}"
+        # cacheable: true
+
+
 - name: "Provisioning web-servers.."
   hosts: webservers
   gather_facts: true
   become: true
+  vars:
+    bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   roles:
     - nginx
   # - iptables
@@ -17,6 +35,8 @@
 - hosts: loadbalancers
   gather_facts: true
   become: true
+  vars:
+    bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   tasks:
     - debug:
         msg: "Provisioning load-balancers.."
@@ -52,6 +72,8 @@
 - hosts: bastions
   gather_facts: true
   become: true
+  vars:
+    bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   tasks:
 
     - debug:

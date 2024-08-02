@@ -8,5 +8,6 @@ variable "tags" {
   default = {
     Name        = "tf-shared-services"
     Environment = "prod"
+    Owner       = "Terraform"
   }
 }
