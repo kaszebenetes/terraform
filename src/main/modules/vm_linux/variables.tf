@@ -1,14 +1,11 @@
 variable "tags" {
   type = map(string)
-  default = {
-    Name        = "tf-main"
-    Environment = "prod"
-  }
 }
-variable "vm_name" {
+
+variable "name" {
   description = "Name of the VM"
   type        = string
-  default     = "vm-linux_lb"
+  default     = "vm-linux"
 }
 
 variable "resource_group_name" {

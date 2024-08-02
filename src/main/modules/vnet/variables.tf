@@ -1,10 +1,7 @@
 variable "tags" {
   type = map(string)
-  default = {
-    Name        = "tf-main"
-    Environment = "prod"
-  }
 }
+
 variable "resource_group_name" {
   description = "Name of the resource group"
   type        = string
@@ -20,9 +17,10 @@ variable "location" {
   default     = "UK South"
 }
 
-variable "vnet_name" {
+variable "name" {
   description = "Name of virtual network"
 }
+
 # variable "dns_servers" {
 #   type        = string
 #   description = "Type dns servers addresses"

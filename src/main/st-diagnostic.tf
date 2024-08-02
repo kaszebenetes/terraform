@@ -4,6 +4,8 @@ resource "azurerm_storage_account" "diagstorage" {
   location                 = azurerm_resource_group.rg.location
   account_tier             = element(split("_", var.boot_diagnostics_sa_type), 0)
   account_replication_type = element(split("_", var.boot_diagnostics_sa_type), 1)
+
+  tags = var.tags
 }
 
 resource "azurerm_storage_container" "diag" {
