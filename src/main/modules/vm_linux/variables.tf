@@ -29,6 +29,12 @@ variable "type_of_nic" {
   default     = "internal"
 }
 
+variable "nsg_id" {
+  description = "NSG id"
+  type = string
+
+}
+
 variable "boot_diagnostics_st_uri" {
   description = "Boot diagnostic Storage account"
   type        = string

@@ -35,6 +35,7 @@ module "web_vm" {
   # NIC config --->
   private_ip_address = "10.0.0.${count.index + 4}"
   subnet_id          = module.subnet[0].id
+  nsg_id = azurerm_network_security_group.nsg-web.id
 
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
@@ -54,7 +55,7 @@ module "web_lb" {
   # NIC config  --->
   private_ip_address = "10.0.1.4"
   subnet_id          = module.subnet[1].id
-
+  nsg_id = azurerm_network_security_group.nsg-lb.id
   # PIP config  --->
   pip_enabled = true
 
@@ -75,6 +76,7 @@ module "bastion" {
   # NIC config  --->
   private_ip_address = "10.0.2.4"
   subnet_id          = module.subnet[2].id
+  nsg_id = azurerm_network_security_group.nsg-bastion.id
 
   # PIP config  --->
   pip_enabled = true
@@ -83,4 +85,16 @@ module "bastion" {
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
   tags = var.tags
+}
+resource "azurerm_subnet_network_security_group_association" "nsg_association_bastion" {
+  subnet_id                 = module.subnet[2].id
+  network_security_group_id = azurerm_network_security_group.nsg-bastion.id
+}
+resource "azurerm_subnet_network_security_group_association" "nsg_association_lb" {
+  subnet_id                 = module.subnet[1].id
+  network_security_group_id = azurerm_network_security_group.nsg-lb.id
+}
+resource "azurerm_subnet_network_security_group_association" "nsg_association_web" {
+  subnet_id                 = module.subnet[0].id
+  network_security_group_id = azurerm_network_security_group.nsg-web.id
 }
