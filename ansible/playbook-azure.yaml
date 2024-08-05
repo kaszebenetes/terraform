@@ -11,11 +11,13 @@
   gather_facts: false
   become: false
   tasks:
+
     - name: "Execute terraform output"
       shell: terraform output -raw bastion_pip
       args:
         chdir: "../src/main"
       register: tf_output
+
     - name: "Set bastion_pip var"
       set_fact:
         bastion_pip: "{{ tf_output.stdout }}"
@@ -45,7 +47,7 @@
 
   roles:
     - haproxy
-    # - iptables
+    - iptables
 
 
 # - hosts: dnsservers
@@ -76,13 +78,13 @@
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   tasks:
 
-    - debug:
-        msg: "Provisioning bastions.."
     # - debug:
-    #     var: hostvars[inventory_hostname]
+    #     msg: "Provisioning bastions.."
+    # # - debug:
+    # #     var: hostvars[inventory_hostname]
 
-    - debug:
-        msg: "Setting up firewall rules dns-servers.."
+    # - debug:
+    #     msg: "Setting up firewall rules dns-servers.."
 
   roles:
     - iptables

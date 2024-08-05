@@ -16,12 +16,14 @@ COMMIT
 -A INPUT -s 10.0.1.4 -p tcp -m tcp --dport 80 -j ACCEPT
 -A INPUT -s 10.0.2.4 -p tcp -m tcp --dport 22 -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
 -A INPUT -j DROP
 -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT
 -A OUTPUT -p tcp -m tcp --dport 443 -j ACCEPT
 -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
 -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A OUTPUT -p tcp -m tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
 -A OUTPUT -j DROP
 COMMIT
 # Completed on Fri Aug  2 13:11:15 2024
