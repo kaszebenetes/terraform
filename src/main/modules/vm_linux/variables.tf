@@ -31,7 +31,7 @@ variable "type_of_nic" {
 
 variable "nsg_id" {
   description = "NSG id"
-  type = string
+  type        = string
 
 }
 
