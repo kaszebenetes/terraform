@@ -32,7 +32,7 @@
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   roles:
     - nginx
-    # - iptables
+    - iptables
 
 - hosts: loadbalancers
   gather_facts: true
@@ -47,7 +47,7 @@
 
   roles:
     - haproxy
-    # - iptables
+    - iptables
 
 
 # - hosts: dnsservers
@@ -87,4 +87,4 @@
     #     msg: "Setting up firewall rules dns-servers.."
 
   roles:
-    # - iptables
+    - iptables
