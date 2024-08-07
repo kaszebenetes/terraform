@@ -39,3 +39,4 @@ terraform.rc
 
 ## custom
 .terraform.lock.hcl
+function.zip

@@ -16,7 +16,7 @@ resource "azurerm_storage_container" "st-container" {
 }
 
 resource "azurerm_storage_account" "st_function" {
-  name                     = "kaszebefuncst"
+  name                     = "kaszebefuncst1"
   resource_group_name      = azurerm_resource_group.rg-tfstates.name
   location                 = azurerm_resource_group.rg-tfstates.location
   account_tier             = "Standard"

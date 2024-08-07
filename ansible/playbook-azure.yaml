@@ -28,6 +28,11 @@
   become: true
   vars:
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
+  pre_tasks:
+    - debug:
+        msg: "Provisioning web-servers.."
+    - debug:
+        var: hostvars[inventory_hostname]
   roles:
     - nginx
   # - iptables
@@ -37,11 +42,11 @@
   become: true
   vars:
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
-  tasks:
+  pre_tasks:
     - debug:
         msg: "Provisioning load-balancers.."
-    # - debug:
-    #     var: hostvars[inventory_hostname]
+    - debug:
+        var: hostvars[inventory_hostname]
 
   roles:
     - haproxy
