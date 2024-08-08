@@ -10,6 +10,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
   location            = var.location
   size                = var.vm_size
   admin_username      = "adminuser"
+  zone = "1"
 
   network_interface_ids = [
     azurerm_network_interface.vm-nic.id

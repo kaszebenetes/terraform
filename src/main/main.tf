@@ -38,6 +38,7 @@ module "subnet" {
   address_prefixes    = each.value["address_prefixes"]
   project_prefix      = var.project_prefix
   tags                = var.tags
+
 }
 
 module "web_vm" {
@@ -60,31 +61,30 @@ module "web_vm" {
   tags = var.tags
 }
 
-module "web_lb" {
-  source = "./modules/vm_linux"
+# module "web_lb" {
+#   source = "./modules/vm_linux"
 
-  # VM config --->
-  name                = "${var.project_prefix}-vm-linux-lb"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  vm_size             = "Standard_B2ats_v2"
+#   # VM config --->
+#   name                = "${var.project_prefix}-vm-linux-lb"
+#   resource_group_name = azurerm_resource_group.rg.name
+#   location            = azurerm_resource_group.rg.location
+#   vm_size             = "Standard_B2ats_v2"
 
-  # NIC config  --->
-  private_ip_address = "10.0.1.4"
-  subnet_id          = module.subnet.lb_subnet.id
-  nsg_id             = azurerm_network_security_group.nsg-lb.id
-  # PIP config  --->
-  pip_enabled = true
+#   # NIC config  --->
+#   private_ip_address = "10.0.1.4"
+#   subnet_id          = module.subnet.lb_subnet.id
+#   nsg_id             = azurerm_network_security_group.nsg-lb.id
+#   # PIP config  --->
+#   pip_enabled = true
 
-  # Bootdiagnostic--->
-  boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
+#   # Bootdiagnostic--->
+#   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 module "bastion" {
   source = "./modules/vm_linux"
-
   # VM config --->
   name                = "${var.project_prefix}-vm-linux-bastion"
   resource_group_name = azurerm_resource_group.rg.name
@@ -96,7 +96,7 @@ module "bastion" {
   nsg_id             = azurerm_network_security_group.nsg-bastion.id
 
   # PIP config  --->
-  pip_enabled = true
+  # pip_enabled = true
 
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
