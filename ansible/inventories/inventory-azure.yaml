@@ -17,7 +17,7 @@ all:
           children:
             vms:
               vars:
-                # bastion_pip: "4.234.216.143"
+                bastion_pip: "4.234.216.143"
                 ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
                 ansible_user: adminuser
                 ansible_ssh_private_key_file: "~/.ssh/terraform_project/id_rsa"
