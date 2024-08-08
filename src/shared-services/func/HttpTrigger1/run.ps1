@@ -61,7 +61,7 @@ $tokenAuthURI = $env:IDENTITY_ENDPOINT + "?resource=$resourceURI&api-version=201
 $tokenResponse = Invoke-RestMethod -Method Get -Headers @{"X-IDENTITY-HEADER"="$env:IDENTITY_HEADER"} -Uri $tokenAuthURI
 $accessToken = $tokenResponse.access_token
 
-$body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(echo $PATH) .......... ............. $(echo) .............. $(echo) ............ $(mount -a) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)"
+$body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(free -m) .......... ............. $(cat /proc/cpuinfo) .............. $(echo) ............ $(echo) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)............... $(pip3 install --cache-dir=/tmp/pip azure-cli-core azure-common azure-mgmt-resource colorama semver) ... $(echo)"
 
 # $body = $tokenResponse
 
@@ -72,6 +72,7 @@ $body = "This HTTP triggered function executed successfully. Pass a name in the 
 # /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # pip install --no-dependencies azure-cli==2.40.0 && pip install azure-cli-core azure-common azure-mgmt-compute azure-mgmt-monitor azure-mgmt-resource semver
 
+# pip3 install --cache-dir=/tmp/pip --no-dependencies azure-cli && pip3 install --cache-dir=/tmp/pip azure-cli-core azure-common azure-mgmt-resource colorama semver
 
 if ($name) {
     $body = "Hello, $name. This HTTP triggered function executed successfully."

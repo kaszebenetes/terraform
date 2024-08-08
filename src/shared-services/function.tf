@@ -23,8 +23,8 @@ resource "azurerm_service_plan" "function_srv_plan" {
 # }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app
-resource "azurerm_linux_function_app" "function_app2" {
-  name                       = "kaszebe-function-app2"
+resource "azurerm_linux_function_app" "function_app" {
+  name                       = "kaszebe-function-app"
   resource_group_name        = azurerm_resource_group.rg-tfstates.name
   location                   = azurerm_resource_group.rg-tfstates.location
 
@@ -49,8 +49,8 @@ resource "azurerm_linux_function_app" "function_app2" {
       #   image_name = "azure-cli"
       #   image_tag = "latest"
       # }
-      # powershell_core_version = "7.4"
       powershell_core_version = "7.2"
+      # powershell_core_version = "7.4"
       # use_custom_runtime = true
     }
     cors {
