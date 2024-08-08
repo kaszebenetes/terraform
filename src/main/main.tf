@@ -23,46 +23,46 @@ module "subnet" {
   tags = var.tags
 }
 
-module "web_vm" {
-  source = "./modules/vm_linux"
-  count  = 2
+# module "web_vm" {
+#   source = "./modules/vm_linux"
+#   count  = 2
 
-  # Vm config --->
-  name                = "${var.project_prefix}-vm-linux-web${count.index + 1}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+#   # Vm config --->
+#   name                = "${var.project_prefix}-vm-linux-web${count.index + 1}"
+#   resource_group_name = azurerm_resource_group.rg.name
+#   location            = azurerm_resource_group.rg.location
 
-  # NIC config --->
-  private_ip_address = "10.0.0.${count.index + 4}"
-  subnet_id          = module.subnet[0].id
+#   # NIC config --->
+#   private_ip_address = "10.0.0.${count.index + 4}"
+#   subnet_id          = module.subnet[0].id
 
-  # Bootdiagnostic--->
-  boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
+#   # Bootdiagnostic--->
+#   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
-module "web_lb" {
-  source = "./modules/vm_linux"
+# module "web_lb" {
+#   source = "./modules/vm_linux"
 
-  # VM config --->
-  name                = "${var.project_prefix}-vm-linux-lb"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  vm_size             = "Standard_B2ats_v2"
+#   # VM config --->
+#   name                = "${var.project_prefix}-vm-linux-lb"
+#   resource_group_name = azurerm_resource_group.rg.name
+#   location            = azurerm_resource_group.rg.location
+#   vm_size             = "Standard_B2ats_v2"
 
-  # NIC config  --->
-  private_ip_address = "10.0.1.4"
-  subnet_id          = module.subnet[1].id
+#   # NIC config  --->
+#   private_ip_address = "10.0.1.4"
+#   subnet_id          = module.subnet[1].id
 
-  # PIP config  --->
-  pip_enabled = true
+#   # PIP config  --->
+#   pip_enabled = true
 
-  # Bootdiagnostic--->
-  boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
+#   # Bootdiagnostic--->
+#   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 module "bastion" {
   source = "./modules/vm_linux"

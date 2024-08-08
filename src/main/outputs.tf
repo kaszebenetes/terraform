@@ -3,6 +3,6 @@ output "bastion_pip" {
 
 }
 
-output "lb_pip" {
-  value = module.web_lb.ip_address
-}
+# output "lb_pip" {
+#   value = module.web_lb.ip_address
+# }

@@ -1,0 +1,10 @@
+FROM alpine
+
+RUN apk add --no-cache py-pip py3-psutil \
+&& pip3 install --break-system-packages --no-cache-dir --no-dependencies azure-cli \
+&& pip3 install --break-system-packages --no-cache-dir azure-cli-core azure-common azure-mgmt-resource \
+&& pip3 install --break-system-packages --no-cache-dir colorama semver \
+&& apk del py3-pip py3-psutil \
+&& apk add --no-cache py3-packaging \
+&& rm -rf /usr/lib/*/__pycache__ \
+&& rm -rf /var/cache/apk/*

