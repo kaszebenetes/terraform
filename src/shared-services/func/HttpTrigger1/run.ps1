@@ -61,7 +61,7 @@ $tokenAuthURI = $env:IDENTITY_ENDPOINT + "?resource=$resourceURI&api-version=201
 $tokenResponse = Invoke-RestMethod -Method Get -Headers @{"X-IDENTITY-HEADER"="$env:IDENTITY_HEADER"} -Uri $tokenAuthURI
 $accessToken = $tokenResponse.access_token
 
-$body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(free -m) .......... ............. $(cat /proc/cpuinfo) .............. $(echo) ............ $(echo) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)............... $(pip3 install --cache-dir=/tmp/pip azure-cli-core azure-common azure-mgmt-resource colorama semver) ... $(echo)"
+# $body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(free -m) .......... ............. $(ls) .............. $(echo) ............ $(pwd) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)............... $(/home/.local/bin/az group list) ... $(echo)"
 
 # $body = $tokenResponse
 
@@ -82,5 +82,5 @@ if ($name) {
 # Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
     StatusCode = [HttpStatusCode]::OK
-    Body = $body
+    Body = $tokenResponse
 })
