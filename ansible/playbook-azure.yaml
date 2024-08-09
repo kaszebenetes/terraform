@@ -12,15 +12,15 @@
   become: false
   tasks:
     - name: "Execute terraform output"
-      shell: terraform output -raw bastion_pip
+      shell: terraform output -raw lb_pip
       args:
         chdir: "../src/main"
       register: tf_output
+      changed_when: false
     - name: "Set bastion_pip var"
       set_fact:
         bastion_pip: "{{ tf_output.stdout }}"
         # cacheable: true
-
 
 - name: "Provisioning web-servers.."
   hosts: webservers
@@ -30,64 +30,57 @@
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   pre_tasks:
     - debug:
-        msg: "Provisioning web-servers.."
-    - debug:
-        var: hostvars[inventory_hostname]
+        msg: "Provisioning bastions.."
+    # - debug:
+    #     var: hostvars[inventory_hostname]
   roles:
+    - iptables
     - nginx
-  # - iptables
 
-- hosts: loadbalancers
-  gather_facts: true
-  become: true
-  vars:
-    bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
-  pre_tasks:
-    - debug:
-        msg: "Provisioning load-balancers.."
-    - debug:
-        var: hostvars[inventory_hostname]
-
-  roles:
-    - haproxy
-    # - iptables
-
-
-# - hosts: dnsservers
+# - hosts: loadbalancers
 #   gather_facts: true
 #   become: true
-#   tasks:
-
+#   vars:
+#     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
+#   pre_tasks:
 #     - debug:
-#         msg: "Provisioning dns-servers.."
+#         msg: "Provisioning load-balancers.."
 #     # - debug:
 #     #     var: hostvars[inventory_hostname]
-
-#     - name: Install the latest version repository epel-release
-#       ansible.builtin.apt:
-#         name: epel-release
-#         state: latest
-
-#     - debug:
-#         msg: "Setting up firewall rules dns-servers.."
-
-    # - name: Firewall rules are setting..
-    #   ansible.builtin.script: .//vms/dns_config/firewall.sh
+#   roles:
+#     - haproxy
+#     - iptables
 
 - hosts: bastions
   gather_facts: true
   become: true
   vars:
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
-  tasks:
-
+  pre_tasks:
     - debug:
         msg: "Provisioning bastions.."
     # - debug:
     #     var: hostvars[inventory_hostname]
+  roles:
+    - iptables
 
-    - debug:
-        msg: "Setting up firewall rules dns-servers.."
 
-  # roles:
-  #   - iptables
+# - hosts: dnsservers
+#   gather_facts: true
+#   become: true
+#   vars:
+#     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
+#   pre_tasks:
+#     - debug:
+#         msg: "Provisioning load-balancers.."
+#     # - debug:
+#     #     var: hostvars[inventory_hostname]
+#   roles:
+#     - name: Install the latest version repository epel-release
+#       ansible.builtin.apt:
+#         name: epel-release
+#         state: latest
+#     - debug:
+#         msg: "Setting up firewall rules dns-servers.."
+#     - name: Firewall rules are setting..
+#       ansible.builtin.script: .//vms/dns_config/firewall.sh
