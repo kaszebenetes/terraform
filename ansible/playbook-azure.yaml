@@ -12,7 +12,7 @@
   become: false
   tasks:
     - name: "Execute terraform output"
-      shell: terraform output -raw bastion_pip
+      shell: terraform output -raw lb_pip
       args:
         chdir: "../src/main"
       register: tf_output
@@ -37,19 +37,19 @@
     - nginx
     - iptables
 
-- hosts: loadbalancers
-  gather_facts: true
-  become: true
-  vars:
-    bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
-  pre_tasks:
-    - debug:
-        msg: "Provisioning load-balancers.."
-    # - debug:
-    #     var: hostvars[inventory_hostname]
-  roles:
-    - haproxy
-    - iptables
+# - hosts: loadbalancers
+#   gather_facts: true
+#   become: true
+#   vars:
+#     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
+#   pre_tasks:
+#     - debug:
+#         msg: "Provisioning load-balancers.."
+#     # - debug:
+#     #     var: hostvars[inventory_hostname]
+#   roles:
+#     - haproxy
+#     - iptables
 
 - hosts: bastions
   gather_facts: true
