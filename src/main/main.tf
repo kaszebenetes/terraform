@@ -36,7 +36,6 @@ module "subnet" {
   resource_group_name = azurerm_resource_group.rg.name
   vnet_name           = module.vnet.vnet_name
   address_prefixes    = each.value["address_prefixes"]
-  project_prefix      = var.project_prefix
   tags                = var.tags
 }
 
