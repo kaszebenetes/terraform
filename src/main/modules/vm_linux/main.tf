@@ -1,7 +1,7 @@
 locals {
-  ext_name = var.ext_name != null ? var.ext_name : "${var.project_prefix}-ext-sh-${var.name}"
-  nic_name = var.nic_name != null ? var.nic_name : "${var.project_prefix}-nic-${var.name}"
-  pip_name = var.pip_name != null ? var.pip_name : "${var.project_prefix}-${var.name}-pip"
+  ext_name = var.ext_name != null ? var.ext_name : "${var.name}-ext-sh"
+  nic_name = var.nic_name != null ? var.nic_name : "${var.name}-nic"
+  pip_name = var.pip_name != null ? var.pip_name : "${var.name}-nic-pip"
 }
 
 resource "azurerm_linux_virtual_machine" "vm-linux" {
@@ -24,6 +24,7 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
+    disk_size_gb         = var.os_disk_size
   }
 
   source_image_reference {
