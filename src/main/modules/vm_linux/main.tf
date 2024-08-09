@@ -21,6 +21,10 @@ resource "azurerm_linux_virtual_machine" "vm-linux" {
     public_key = file("files/id_rsa.pub")
   }
 
+  identity {
+    type = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.uai.id]
+  }
 
   os_disk {
     caching              = "ReadWrite"
@@ -87,3 +91,8 @@ resource "azurerm_virtual_machine_extension" "vm-linux-sh" {
 
 # # Standard_B2ats_v2
 # count.index <= 1?  0 : default = count.index
+
+data "azurerm_user_assigned_identity" "uai" {
+  name                = "test-uai"
+  resource_group_name = "terraform-tfstates"
+}
