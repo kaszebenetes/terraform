@@ -1,4 +1,3 @@
-
 locals {
   backend_pools = {
     web_pool = {
@@ -6,7 +5,6 @@ locals {
       protocol   = "Tcp"
       port       = 80
       probe_name = "web-probe"
-      ip_address = ["10.0.0.4", "10.0.0.5"]
     }
     bastion_pool = {
       name       = "bastion-backend-pool"
