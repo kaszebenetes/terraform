@@ -59,31 +59,30 @@ module "web_vm" {
   tags = var.tags
 }
 
-module "web_lb" {
-  source = "./modules/vm_linux"
+# module "web_lb" {
+#   source = "./modules/vm_linux"
 
-  # VM config --->
-  name                = "${var.project_prefix}-vm-linux-lb"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  vm_size             = "Standard_B2ats_v2"
+#   # VM config --->
+#   name                = "${var.project_prefix}-vm-linux-lb"
+#   resource_group_name = azurerm_resource_group.rg.name
+#   location            = azurerm_resource_group.rg.location
+#   vm_size             = "Standard_B2ats_v2"
 
-  # NIC config  --->
-  private_ip_address = "10.0.1.4"
-  subnet_id          = module.subnet.lb_subnet.id
-  nsg_id             = azurerm_network_security_group.nsg-lb.id
-  # PIP config  --->
-  pip_enabled = true
+#   # NIC config  --->
+#   private_ip_address = "10.0.1.4"
+#   subnet_id          = module.subnet.lb_subnet.id
+#   nsg_id             = azurerm_network_security_group.nsg-lb.id
+#   # PIP config  --->
+#   pip_enabled = true
 
-  # Bootdiagnostic--->
-  boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
+#   # Bootdiagnostic--->
+#   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 module "bastion" {
   source = "./modules/vm_linux"
-
   # VM config --->
   name                = "${var.project_prefix}-vm-linux-bastion"
   resource_group_name = azurerm_resource_group.rg.name
@@ -95,23 +94,10 @@ module "bastion" {
   nsg_id             = azurerm_network_security_group.nsg-bastion.id
 
   # PIP config  --->
-  pip_enabled = true
+  # pip_enabled = true
 
   # Bootdiagnostic--->
   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
   tags = var.tags
-}
-
-resource "azurerm_subnet_network_security_group_association" "nsg_association_bastion" {
-  subnet_id                 = module.subnet.bastion_subnet.id
-  network_security_group_id = azurerm_network_security_group.nsg-bastion.id
-}
-resource "azurerm_subnet_network_security_group_association" "nsg_association_lb" {
-  subnet_id                 = module.subnet.lb_subnet.id
-  network_security_group_id = azurerm_network_security_group.nsg-lb.id
-}
-resource "azurerm_subnet_network_security_group_association" "nsg_association_web" {
-  subnet_id                 = module.subnet.web_subnet.id
-  network_security_group_id = azurerm_network_security_group.nsg-web.id
 }

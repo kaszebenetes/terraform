@@ -113,3 +113,8 @@ resource "azurerm_network_security_group" "nsg-bastion" {
 
   tags = var.tags
 }
+
+resource "azurerm_subnet_network_security_group_association" "nsg_association_bastion" {
+  subnet_id                 = module.subnet.bastion_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg-bastion.id
+}
