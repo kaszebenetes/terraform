@@ -29,7 +29,7 @@ module "vnet" {
 }
 
 module "subnet" {
-  source = "./modules/subnet"
+  source   = "./modules/subnet"
   for_each = local.subnets
 
   name                = "${var.project_prefix}-${each.value["name"]}"
@@ -52,11 +52,7 @@ module "web_vm" {
 
   # NIC config --->
   private_ip_address = "10.0.0.${count.index + 4}"
-<<<<<<< HEAD
   subnet_id          = module.subnet.web_subnet.id
-=======
-  subnet_id          = module.subnet[0].id
->>>>>>> c551f5b8652ccbd5803cdf48f7bb09d8e5def64c
   nsg_id             = azurerm_network_security_group.nsg-web.id
 
   # Bootdiagnostic--->
@@ -74,7 +70,6 @@ module "web_vm" {
 #   location            = azurerm_resource_group.rg.location
 #   vm_size             = "Standard_B2ats_v2"
 
-<<<<<<< HEAD
 #   # NIC config  --->
 #   private_ip_address = "10.0.1.4"
 #   subnet_id          = module.subnet.lb_subnet.id
@@ -84,14 +79,6 @@ module "web_vm" {
 
 #   # Bootdiagnostic--->
 #   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
-=======
-  # NIC config  --->
-  private_ip_address = "10.0.1.4"
-  subnet_id          = module.subnet[1].id
-  nsg_id             = azurerm_network_security_group.nsg-lb.id
-  # PIP config  --->
-  pip_enabled = true
->>>>>>> c551f5b8652ccbd5803cdf48f7bb09d8e5def64c
 
 #   tags = var.tags
 # }
@@ -105,11 +92,7 @@ module "bastion" {
 
   # NIC config  --->
   private_ip_address = "10.0.2.4"
-<<<<<<< HEAD
   subnet_id          = module.subnet.bastion_subnet.id
-=======
-  subnet_id          = module.subnet[2].id
->>>>>>> c551f5b8652ccbd5803cdf48f7bb09d8e5def64c
   nsg_id             = azurerm_network_security_group.nsg-bastion.id
 
   # PIP config  --->
