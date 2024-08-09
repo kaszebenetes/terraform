@@ -36,9 +36,13 @@ module "subnet" {
   resource_group_name = azurerm_resource_group.rg.name
   vnet_name           = module.vnet.vnet_name
   address_prefixes    = each.value["address_prefixes"]
+<<<<<<< HEAD
   project_prefix      = var.project_prefix
   tags                = var.tags
 
+=======
+  tags                = var.tags
+>>>>>>> b96973fdeff16316e1e19a0e88070c4708df1460
 }
 
 module "web_vm" {
@@ -70,12 +74,21 @@ module "web_vm" {
 #   location            = azurerm_resource_group.rg.location
 #   vm_size             = "Standard_B2ats_v2"
 
+<<<<<<< HEAD
 #   # NIC config  --->
 #   private_ip_address = "10.0.1.4"
 #   subnet_id          = module.subnet.lb_subnet.id
 #   nsg_id             = azurerm_network_security_group.nsg-lb.id
 #   # PIP config  --->
 #   pip_enabled = true
+=======
+  # NIC config  --->
+  private_ip_address = "10.0.1.4"
+  subnet_id          = module.subnet.lb_subnet.id
+  nsg_id             = azurerm_network_security_group.nsg-lb.id
+  # PIP config  --->
+  pip_enabled = true
+>>>>>>> b96973fdeff16316e1e19a0e88070c4708df1460
 
 #   # Bootdiagnostic--->
 #   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
@@ -105,14 +118,14 @@ module "bastion" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_association_bastion" {
-  subnet_id                 = module.subnet[2].id
+  subnet_id                 = module.subnet.bastion_subnet.id
   network_security_group_id = azurerm_network_security_group.nsg-bastion.id
 }
 resource "azurerm_subnet_network_security_group_association" "nsg_association_lb" {
-  subnet_id                 = module.subnet[1].id
+  subnet_id                 = module.subnet.lb_subnet.id
   network_security_group_id = azurerm_network_security_group.nsg-lb.id
 }
 resource "azurerm_subnet_network_security_group_association" "nsg_association_web" {
-  subnet_id                 = module.subnet[0].id
+  subnet_id                 = module.subnet.web_subnet.id
   network_security_group_id = azurerm_network_security_group.nsg-web.id
 }
