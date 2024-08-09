@@ -94,6 +94,5 @@ resource "azurerm_network_security_group" "nsg-web" {
     description                = "Deny all other outbound traffic"
   }
 
-
   tags = var.tags
 }
