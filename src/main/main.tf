@@ -29,7 +29,7 @@ module "vnet" {
 }
 
 module "subnet" {
-  source = "./modules/subnet"
+  source   = "./modules/subnet"
   for_each = local.subnets
 
   name                = "${var.project_prefix}-${each.value["name"]}"
