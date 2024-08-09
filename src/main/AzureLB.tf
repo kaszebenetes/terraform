@@ -78,7 +78,7 @@ resource "azurerm_lb_rule" "lb-rule" {
   backend_address_pool_ids = [azurerm_lb_backend_address_pool.backend_pool[each.key].id]
   probe_id                 = azurerm_lb_probe.probe[each.key].id
 
-  frontend_ip_configuration_name = "primary" # Nazwa zdefiniowana w bloku frontend_ip_configuration w zasobie azurerm_lb.lb
+  frontend_ip_configuration_name = "primary"
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "web_servers" {
