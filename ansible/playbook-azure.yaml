@@ -34,8 +34,8 @@
     # - debug:
     #     var: hostvars[inventory_hostname]
   roles:
-    - nginx
     - iptables
+    - nginx
 
 # - hosts: loadbalancers
 #   gather_facts: true

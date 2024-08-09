@@ -1,16 +1,18 @@
 locals {
   backend_pools = {
     web_pool = {
-      name       = "web-backend-pool"
-      protocol   = "Tcp"
-      port       = 80
-      probe_name = "web-probe"
+      name          = "web-backend-pool"
+      protocol      = "Tcp"
+      frontend_port = 80
+      backend_port  = 80
+      probe_name    = "web-probe"
     }
     bastion_pool = {
-      name       = "bastion-backend-pool"
-      protocol   = "Tcp"
-      port       = 22
-      probe_name = "bastion-probe"
+      name          = "bastion-backend-pool"
+      protocol      = "Tcp"
+      frontend_port = 31415
+      backend_port  = 22
+      probe_name    = "bastion-probe"
     }
   }
 }
@@ -25,11 +27,10 @@ resource "azurerm_public_ip" "lb-pip" {
 }
 
 resource "azurerm_lb" "lb" {
-  name                = "lb"
+  name                = "${var.project_prefix}-lb"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   sku                 = "Standard"
-
 
   frontend_ip_configuration {
     name                 = "primary"
@@ -37,17 +38,18 @@ resource "azurerm_lb" "lb" {
   }
 }
 
-resource "azurerm_network_interface" "nic" {
-  name                = "${var.project_prefix}-lb-nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+# resource "azurerm_lb" "lb-private" {
+#   name                = "${var.project_prefix}-lb-private"
+#   location            = azurerm_resource_group.rg.location
+#   resource_group_name = azurerm_resource_group.rg.name
+#   sku                 = "Standard"
 
-  ip_configuration {
-    name                          = "config"
-    subnet_id                     = module.subnet.lb_subnet.id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
+#   frontend_ip_configuration {
+#     name = "frontend-ip"
+#     subnet_id = module.subnet.lb_subnet.id
+#     private_ip_address_allocation = "Dynamic"
+#   }
+# }
 
 # Backend Pools
 resource "azurerm_lb_backend_address_pool" "backend_pool" {
@@ -61,7 +63,7 @@ resource "azurerm_lb_probe" "probe" {
   for_each        = local.backend_pools
   loadbalancer_id = azurerm_lb.lb.id
   name            = each.value["probe_name"]
-  port            = each.value["port"]
+  port            = each.value["backend_port"]
   protocol        = each.value["protocol"]
 }
 
@@ -70,9 +72,9 @@ resource "azurerm_lb_rule" "lb-rule" {
   for_each                 = local.backend_pools
   loadbalancer_id          = azurerm_lb.lb.id
   name                     = "${each.value["name"]}-rule"
-  protocol                 = "Tcp"
-  frontend_port            = each.value["port"]
-  backend_port             = each.value["port"]
+  protocol                 = each.value["protocol"]
+  frontend_port            = each.value["frontend_port"]
+  backend_port             = each.value["backend_port"]
   backend_address_pool_ids = [azurerm_lb_backend_address_pool.backend_pool[each.key].id]
   probe_id                 = azurerm_lb_probe.probe[each.key].id
 

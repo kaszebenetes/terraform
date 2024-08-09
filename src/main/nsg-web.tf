@@ -11,7 +11,7 @@ resource "azurerm_network_security_group" "nsg-web" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "80"
-    source_address_prefix      = "10.0.1.4"
+    source_address_prefix      = "*"
     destination_address_prefix = "*"
     description                = "Allow HTTP traffic from Load Balancer"
   }
@@ -95,4 +95,9 @@ resource "azurerm_network_security_group" "nsg-web" {
   }
 
   tags = var.tags
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg_association_web" {
+  subnet_id                 = module.subnet.web_subnet.id
+  network_security_group_id = azurerm_network_security_group.nsg-web.id
 }
