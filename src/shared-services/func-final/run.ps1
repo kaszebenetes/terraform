@@ -1,15 +1,9 @@
-https://cloudjourney.medium.com/azure-powershell-function-app-101-fbde3c5832df
 
-# $body = $tokenResponse
-
-# $body = "$(az vm list -o tsv)"
-
-# apt list --installed
-# dpkg --get-selections
-# /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-# pip install --no-dependencies azure-cli==2.40.0 && pip install azure-cli-core azure-common azure-mgmt-compute azure-mgmt-monitor azure-mgmt-resource semver
-
-# pip3 install --cache-dir=/tmp/pip --no-dependencies azure-cli && pip3 install --cache-dir=/tmp/pip azure-cli-core azure-common azure-mgmt-resource colorama semver
+# Interact with query parameters or the body of the request.
+$name = $Request.Query.Name
+if (-not $name) {
+    $name = $Request.Body.Name
+}
 
 # Install-Module -Name Az -AllowClobber -Scope CurrentUser
 # Import-Module Az
@@ -52,6 +46,21 @@ https://cloudjourney.medium.com/azure-powershell-function-app-101-fbde3c5832df
 
 # http://0.0.0.0:7071/MSI/token?resource=https://vault.azure.net&api-version=2017-09-01
 
-# $subid = $(curl 'http://0.0.0.0:7071/MSI/token?resource=https://vault.azure.net&api-version=2017-09-01' -H Metadata:true)
+$subid = $(curl 'http://0.0.0.0:7071/MSI/token?resource=https://vault.azure.net&api-version=2017-09-01' -H Metadata:true)
 
-# $body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(free -m) .......... ............. $(cat /proc/cpuinfo) .............. $(echo) ............ $(echo) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)............... $(pip3 install --cache-dir=/tmp/pip azure-cli-core azure-common azure-mgmt-resource colorama semver) ... $(echo)"
+# $body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response. $tokenResponse. $subid............. $(free -m) .......... ............. $(ls) .............. $(echo) ............ $(pwd) ............. $(/home/.local/bin/az login --identity) ............ $(/home/.local/bin/az --version)............... $(/home/.local/bin/az group list) ... $(echo)"
+
+# $body = $tokenResponse
+
+# $body = "$(az vm list -o tsv)"
+
+# apt list --installed
+# dpkg --get-selections
+# /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# pip install --no-dependencies azure-cli==2.40.0 && pip install azure-cli-core azure-common azure-mgmt-compute azure-mgmt-monitor azure-mgmt-resource semver
+
+# pip3 install --cache-dir=/tmp/pip --no-dependencies azure-cli && pip3 install --cache-dir=/tmp/pip azure-cli-core azure-common azure-mgmt-resource colorama semver
+
+if ($name) {
+    $body = "Hello, $name. This HTTP triggered function executed successfully."
+}

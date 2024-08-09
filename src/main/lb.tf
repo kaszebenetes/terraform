@@ -81,12 +81,12 @@ resource "azurerm_lb_rule" "lb-rule" {
   frontend_ip_configuration_name = "primary"
 }
 
-resource "azurerm_network_interface_backend_address_pool_association" "web_servers" {
-  count                   = 2
-  network_interface_id    = module.web_vm[count.index].network_interface_id
-  ip_configuration_name   = "internal"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.backend_pool["web_pool"].id
-}
+# resource "azurerm_network_interface_backend_address_pool_association" "web_servers" {
+#   count                   = 2
+#   network_interface_id    = module.web_vm[count.index].network_interface_id
+#   ip_configuration_name   = "internal"
+#   backend_address_pool_id = azurerm_lb_backend_address_pool.backend_pool["web_pool"].id
+# }
 
 resource "azurerm_network_interface_backend_address_pool_association" "bastion" {
   network_interface_id    = module.bastion.network_interface_id

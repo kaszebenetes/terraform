@@ -39,25 +39,25 @@ module "subnet" {
   tags                = var.tags
 }
 
-module "web_vm" {
-  source = "./modules/vm_linux"
-  count  = 2
+# module "web_vm" {
+#   source = "./modules/vm_linux"
+#   count  = 2
 
-  # Vm config --->
-  name                = "${var.project_prefix}-vm-linux-web${count.index + 1}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+#   # Vm config --->
+#   name                = "${var.project_prefix}-vm-linux-web${count.index + 1}"
+#   resource_group_name = azurerm_resource_group.rg.name
+#   location            = azurerm_resource_group.rg.location
 
-  # NIC config --->
-  private_ip_address = "10.0.0.${count.index + 4}"
-  subnet_id          = module.subnet.web_subnet.id
-  nsg_id             = azurerm_network_security_group.nsg-web.id
+#   # NIC config --->
+#   private_ip_address = "10.0.0.${count.index + 4}"
+#   subnet_id          = module.subnet.web_subnet.id
+#   nsg_id             = azurerm_network_security_group.nsg-web.id
 
-  # Bootdiagnostic--->
-  boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
+#   # Bootdiagnostic--->
+#   boot_diagnostics_st_uri = azurerm_storage_account.diagstorage.primary_blob_endpoint
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
 
 # module "web_lb" {
 #   source = "./modules/vm_linux"
