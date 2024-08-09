@@ -32,10 +32,6 @@ variable "type_of_nic" {
 variable "nsg_id" {
   description = "NSG id"
   type        = string
-<<<<<<< HEAD
-
-=======
->>>>>>> c551f5b8652ccbd5803cdf48f7bb09d8e5def64c
 }
 
 variable "boot_diagnostics_st_uri" {
