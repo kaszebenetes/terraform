@@ -1,3 +1,49 @@
 ---
-- name: Setting up iptables...
-  ansible.builtin.script: "{{ ansible_facts['nodename' ]}}.sh"
+- name: Disable newer firewall services
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    enabled: false
+    masked: no
+    state: stopped
+  loop:
+    # - firewalld
+    - nftables
+
+- name: Install iptables-persistent package
+  apt:
+    name: iptables-persistent
+    state: present
+    update_cache: yes
+
+- name: Creates directory
+  ansible.builtin.file:
+    path: /etc/iptables
+    state: directory
+
+- name: Inserting template of firewall rules
+  ansible.builtin.template:
+    src: "{{ iptables_template }}"
+    dest: "/etc/iptables/rules.v4"
+
+# This will load a state from a file, with a rollback in case of access loss
+- name: Restore firewall state from a file
+  community.general.iptables_state:
+    state: restored
+    path: /etc/iptables/rules.v4
+  async: "{{ ansible_timeout }}"
+  poll: 0
+
+- name: Ensure netfilter-persistent service is started and enabled
+  service:
+    name: netfilter-persistent
+    state: started
+    enabled: yes
+
+# - name: Check if iptables rules are persisted
+#   command: iptables -L
+#   register: iptables_rules
+
+# - name: Fail if iptables rules are not persisted
+#   fail:
+#     msg: "Iptables rules were not persisted after reboot"
+#   when: "'ACCEPT' not in iptables_rules.stdout"
