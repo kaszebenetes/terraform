@@ -1,2 +1,2 @@
 ---
-test_var: "value"
+iptables_template: "templates/generic.j2"
