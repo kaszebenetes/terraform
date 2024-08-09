@@ -1,0 +1,2 @@
+---
+iptables_template: "templates/web.j2"
