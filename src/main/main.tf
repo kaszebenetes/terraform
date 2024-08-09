@@ -1,5 +1,22 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
+locals {
+  subnets = {
+    web_subnet = {
+      name             = "web_subnet"
+      address_prefixes = ["10.0.0.0/24"]
+    }
 
+    lb_subnet = {
+      name             = "lb_subnet"
+      address_prefixes = ["10.0.1.0/24"]
+    }
+
+    bastion_subnet = {
+      name             = "bastion_subnet"
+      address_prefixes = ["10.0.2.0/24"]
+    }
+  }
+}
 module "vnet" {
   source = "./modules/vnet"
 
@@ -12,15 +29,14 @@ module "vnet" {
 }
 
 module "subnet" {
-  source = "./modules/subnet"
-  count  = 3
+  source   = "./modules/subnet"
+  for_each = local.subnets
 
-  name                = "${var.project_prefix}-vnet-subnet-${count.index}"
+  name                = "${var.project_prefix}-${each.value["name"]}"
   resource_group_name = azurerm_resource_group.rg.name
   vnet_name           = module.vnet.vnet_name
-  address_prefixes    = ["10.0.${count.index}.0/24"]
-
-  tags = var.tags
+  address_prefixes    = each.value["address_prefixes"]
+  tags                = var.tags
 }
 
 module "web_vm" {
@@ -34,7 +50,7 @@ module "web_vm" {
 
   # NIC config --->
   private_ip_address = "10.0.0.${count.index + 4}"
-  subnet_id          = module.subnet[0].id
+  subnet_id          = module.subnet.web_subnet.id
   nsg_id             = azurerm_network_security_group.nsg-web.id
 
   # Bootdiagnostic--->
@@ -54,7 +70,7 @@ module "web_lb" {
 
   # NIC config  --->
   private_ip_address = "10.0.1.4"
-  subnet_id          = module.subnet[1].id
+  subnet_id          = module.subnet.lb_subnet.id
   nsg_id             = azurerm_network_security_group.nsg-lb.id
   # PIP config  --->
   pip_enabled = true
@@ -75,7 +91,7 @@ module "bastion" {
 
   # NIC config  --->
   private_ip_address = "10.0.2.4"
-  subnet_id          = module.subnet[2].id
+  subnet_id          = module.subnet.bastion_subnet.id
   nsg_id             = azurerm_network_security_group.nsg-bastion.id
 
   # PIP config  --->
@@ -88,14 +104,14 @@ module "bastion" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_association_bastion" {
-  subnet_id                 = module.subnet[2].id
+  subnet_id                 = module.subnet.bastion_subnet.id
   network_security_group_id = azurerm_network_security_group.nsg-bastion.id
 }
 resource "azurerm_subnet_network_security_group_association" "nsg_association_lb" {
-  subnet_id                 = module.subnet[1].id
+  subnet_id                 = module.subnet.lb_subnet.id
   network_security_group_id = azurerm_network_security_group.nsg-lb.id
 }
 resource "azurerm_subnet_network_security_group_association" "nsg_association_web" {
-  subnet_id                 = module.subnet[0].id
+  subnet_id                 = module.subnet.web_subnet.id
   network_security_group_id = azurerm_network_security_group.nsg-web.id
 }
