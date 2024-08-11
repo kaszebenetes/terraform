@@ -1,0 +1,11 @@
+plugin: azure_rm
+include_vm_resource_groups:
+ - kaszebenetes-tf-prod-rg
+auth_source: auto
+groups:
+  webservers:
+    filters:
+      - name: kaszebenets-linux-vm-web*
+  bastion:
+    filters:
+      - name: kaszebenets-linux-vm-bastion*
