@@ -1,47 +1,33 @@
 ---
 # https://docs.docker.com/engine/install/ubuntu/
+- name: Uninstall conflicting packages
+  ansible.builtin.shell: |
+    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
-- name: Update apt cache
+- name: Docker Gpg key
+  ansible.builtin.shell: |
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+- name: Add Docker APT repository
+  ansible.builtin.shell: |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+- name: Update the package index with Docker packages
   apt:
     update_cache: yes
 
-- name: Install required packages
+- name: Install Docker ce
   apt:
-    name: "{{ packages }}"
+    name: docker-ce
     state: present
-  vars:
-    packages:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg-agent
-      - software-properties-common
-
-- name: Add Docker GPG apt key
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-
-- name: Add Docker repository
-  apt_repository:
-    repo: deb [arch={{ ansible_arch }}] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
-    state: present
-
-- name: Update apt cache
-  apt:
     update_cache: yes
+    force: yes
 
-- name: Install Docker
-  apt:
-    name: "{{ docker_pack }}"
-    state: present
-  vars:
-    docker_pack:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-buildx-plugin
-      - docker-compose-plugin
 
 - name: Ensure Docker service is running
   service:
@@ -49,10 +35,12 @@
     state: started
     enabled: yes
 
-- name: Add user to docker group (optional)
+- name: Add user to docker group
   user:
     name: "{{ ansible_ssh_user }}"
     groups: docker
     append: yes
   become: yes
   become_method: sudo
+
+- import_tasks: config.yaml

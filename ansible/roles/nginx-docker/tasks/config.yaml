@@ -1,29 +1,4 @@
 ---
-
-- name: Copy Dockerfile to the remote host
-  copy:
-    src: ./templates/Dockerfile
-    dest: /tmp/
-
-- name: Build the Docker image
-  community.docker.docker_module:
-    image: nginx
-    build:
-      path: /tmp
-      dockerfile: Dockerfile
-    tag: latest
-
-- name: Run the container
-  community.docker.docker_module:
-    name: nginx_container
-    image: nginx:latest
-    state: started
-    ports:
-      - "80:80"
-    volumes:
-      - "{{ nginx_index_path }}:{{ nginx_index_path }}"
-      - "{{ nginx_config_path }}:{{ nginx_config_path }}"
-
 - name: Copy over templated index.html
   ansible.builtin.template:
     # src: "{{ playbook_dir }}/vms/web_config/index.txt"
@@ -33,8 +8,23 @@
     dest: "{{ nginx_index_path }}"
     # remote_src: false
   register: index_file
-  notify:
-    - Restarting nginx service
+
+- name: Copy Dockerfile to the remote host
+  copy:
+    src: ./templates/Dockerfile
+    dest: /tmp/
+
+- name: Build image using cache source
+  docker_image:
+    name: web
+    build:
+      path: /tmp/
+      dockerfile: Dockerfile
+    source: build
+
+
+- name: Run the container
+  shell: docker run -d --name webserver -p 80:80 -v /var/www/html:/usr/share/nginx/html web
 
 # - debug:
 #     var: index_file

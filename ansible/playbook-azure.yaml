@@ -33,7 +33,7 @@
     #     var: hostvars[inventory_hostname]
   roles:
     - nginx-docker
-    - iptables
+    # - iptables
 
 # - hosts: loadbalancers
 #   gather_facts: true
@@ -60,7 +60,7 @@
     # - debug:
     #     var: hostvars[inventory_hostname]
   roles:
-    - iptables
+    # - iptables
 
 
 # - hosts: dnsservers

@@ -1,5 +1,4 @@
-FROM ubuntu:22.04
+FROM nginx:latest
 
-RUN apt-get update && apt-get install -y nginx
-
-CMD /usr/sbin/nginx -g "daemon off;"
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
