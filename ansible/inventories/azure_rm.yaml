@@ -1,0 +1,14 @@
+---
+# TODO: Try to run ansible from docker and azure-cli installed together with ansible under one virtual-env
+plugin: azure.azcollection.azure_rm
+auth_source: cli
+# auth_source: auto
+include_vm_resource_groups:
+  - kaszebenetes-tf-prod-rg
+groups:
+  webservers:
+    filters:
+      - name: kaszebenets-linux-vm-web*
+  bastion:
+    filters:
+      - name: kaszebenets-linux-vm-bastion*
