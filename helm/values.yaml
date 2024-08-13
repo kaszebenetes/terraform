@@ -1,0 +1,10 @@
+---
+# https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+# user:password
+# admin:prom-operator
+grafana:
+  service:
+    type: LoadBalancer
+
+alertmanager:
+  enabled: false

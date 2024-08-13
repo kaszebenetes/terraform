@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.app_name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app_name }}
+    spec:
+      containers:
+        - name: {{ .Values.app_name }}
+          image: yeasy/simple-web:latest
+          ports:
+            - containerPort: 80
