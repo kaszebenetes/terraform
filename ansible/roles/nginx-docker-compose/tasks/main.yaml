@@ -47,7 +47,7 @@
     src: docker-compose.yml
     dest: ~/project/docker-compose.yaml
 
-- name: Check if kobenginx container is running
+- name: Check if container is running
   shell: docker ps | grep "kobenginx"
   register: container_check
   ignore_errors: yes

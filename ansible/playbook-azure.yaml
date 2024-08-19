@@ -32,7 +32,9 @@
     # - debug:
     #     var: hostvars[inventory_hostname]
   roles:
+    - docker
     - nginx-docker
+    - nginx-docker-compose
     # - iptables
 
 # - hosts: loadbalancers

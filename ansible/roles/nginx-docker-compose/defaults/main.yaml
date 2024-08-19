@@ -1,0 +1,5 @@
+---
+nginx_index_path: "/var/www/html/"
+nginx_config_path: /etc/nginx/nginx.conf
+ansible_arch: "{{ ansible_facts['architecture'] }}"
+ansible_lsb.codename: "{{ ansible_facts['distribution_major_version'] }}"
