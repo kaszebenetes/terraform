@@ -47,12 +47,16 @@
     src: docker-compose.yml
     dest: ~/project/docker-compose.yaml
 
+- name: Check if kobenginx container is running
+  shell: docker ps | grep "kobenginx"
+  register: container_check
+  ignore_errors: yes
+
 - name: Run Docker Compose
   shell: docker-compose up -d --build
   args:
     chdir: ~/project
-
-
+  when: container_check.rc != 0
 
 # - debug:
 #     var: index_file
