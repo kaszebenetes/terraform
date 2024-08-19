@@ -12,6 +12,16 @@
     state: directory
     mode: '0755'
 
+- name: Create project directory on the remote server
+  file:
+    path: ~/project
+    state: directory
+
+- name: Copy Dockerfile to remote server
+  copy:
+    src: Dockerfile
+    dest: ~/project/Dockerfile
+
 - name: Copy over templated index.html
   ansible.builtin.template:
     # src: "{{ playbook_dir }}/vms/web_config/index.txt"
@@ -22,27 +32,27 @@
     # remote_src: false
   register: index_file
 
-- name: Copy over templated index.html
+- name: Copy over templated nginx.conf
   ansible.builtin.template:
     src: nginx.conf.j2
     dest: "{{ nginx_config_path }}"
 
-
-- name: Copy Dockerfile to the remote host
+- name: Copy Dockerfile to remote server
   copy:
-    src: ./templates/Dockerfile
-    dest: /tmp/
+    src: Dockerfile
+    dest: ~/project/Dockerfile
 
-- name: Build image using cache source
-  docker_image:
-    name: web
-    build:
-      path: /tmp/
-      dockerfile: Dockerfile
-    source: build
+- name: Copy docker-compose.yml to remote server
+  copy:
+    src: docker-compose.yml
+    dest: ~/project/docker-compose.yaml
 
-- name: Run the container
-  shell: docker run -d --name webserver -p 80:80 -v /var/www/html:/var/www/html web
+- name: Run Docker Compose
+  shell: docker-compose up -d --build
+  args:
+    chdir: ~/project
+
+
 
 # - debug:
 #     var: index_file
