@@ -3,7 +3,7 @@ name: Build and publish Docker Compose images
 
 on:
   push:
-    branches: ['release']
+    branches: ['feature/docker']
 
 env:
   REGISTRY: ghcr.io
