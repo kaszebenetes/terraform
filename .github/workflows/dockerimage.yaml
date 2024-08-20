@@ -46,4 +46,5 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-path: ansible/roles/nginx-docker-compose/files/docker-compose.yml
           push-to-registry: true
