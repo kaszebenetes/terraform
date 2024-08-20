@@ -2,10 +2,16 @@ version: '3.8'
 services:
   web:
     container_name: kobenginx
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ghcr.io/kaszebenetes/terraform:feature-docker
+    # Uncomment if u build custom image --->
+
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+
+    #  <----
+    # and comment the line below -->
+    image: ghcr.io/kaszebenetes/terraform:feature-docker # Using image from github packages
+    # <----
     ports:
       - "80:80"
     volumes:

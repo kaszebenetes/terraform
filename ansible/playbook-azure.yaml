@@ -34,7 +34,7 @@
   roles:
     - docker
     - nginx-docker
-    - nginx-docker-compose
+    # - nginx-docker-compose
     # - iptables
 
 # - hosts: loadbalancers

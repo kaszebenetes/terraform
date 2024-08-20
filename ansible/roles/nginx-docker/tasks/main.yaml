@@ -29,31 +29,50 @@
 
 - name: Create project directory on the remote server
   file:
-    path: ~/project
+    path: "{{project_path}}"
     state: directory
 
-- name: Copy Dockerfile to remote server
-  copy:
-    src: ./templates/Dockerfile
-    dest: ~/project/Dockerfile
+# In case of use custom dockerfile , uncomment =======>
 
-- name: Build image using cache source
+# - name: Copy Dockerfile to remote server
+#   copy:
+#     src: ./templates/Dockerfile
+#     dest: "{{project_path}}"
+
+# - name: Build image using cache source
+#   docker_image:
+#     name: web
+#     build:
+#       path: "{{project_path}}"
+#       dockerfile: Dockerfile
+#     source: build
+
+#  <===================
+
+#
+- name: Pulling image from GHCR
   docker_image:
-    name: web
-    build:
-      path: ~/project/
-      dockerfile: Dockerfile
-    source: build
+    name: kaszebenetes/terraform:feature-docker
+    source: pull
+    platform: https://ghcr.io
 
 - name: Check if container is running
   shell: docker ps | grep "webserver"
   register: container_check
   ignore_errors: yes
 
-- name: Run Docker
-  shell: docker run -d --name webserver -p 8080:80 -v /var/www/html:/var/www/html webserver
-  args:
-    chdir: ~/project
-  when: container_check.rc != 0
-# - debug:
-#     var: index_file
+- name: Uruchom kontener
+  docker_container:
+    name: web
+    image: kaszebenetes/terraform:feature-docker
+    # Dodaj tutaj dodatkowe opcje uruchamiania kontenera, np. porty, wolumeny
+    ports:
+      - "8080:80"
+    volumes:
+      - /var/www/html:/var/www/html
+
+# - name: Run Docker
+#   shell: docker run -d --name webserver -p 8080:80 -v /var/www/html:/var/www/html kobenginx
+#   args:
+#     chdir: "{{project_path}}"
+#   when: container_check.rc != 0
