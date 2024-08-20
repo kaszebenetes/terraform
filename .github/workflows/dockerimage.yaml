@@ -1,9 +1,9 @@
 ---
-name: Build and publish Docker Compose image
+name: Build and publish Docker Compose images
 
 on:
   push:
-    branches: ['feature/docker']
+    branches: ['release']
 
 env:
   REGISTRY: ghcr.io
@@ -34,8 +34,8 @@ jobs:
 
       - name: Build and push Docker images with Docker Compose
         run: |
-          docker-compose -f ansible/roles/nginx-docker-compose/files/docker-compose.yml build
-          docker-compose -f ansible/roles/nginx-docker-compose/files/docker-compose.yml push
+          docker-compose -f terraform/ansible/roles/nginx-docker-compose/files/docker-compose.yml build
+          docker-compose -f terraform/ansible/roles/nginx-docker-compose/files/docker-compose.yml push
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
