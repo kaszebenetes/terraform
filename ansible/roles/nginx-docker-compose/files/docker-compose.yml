@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ghcr.io/kaszebenetes/terraform:feature-docker
     ports:
       - "80:80"
     volumes:
