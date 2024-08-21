@@ -4,3 +4,5 @@ nginx_config_path: /etc/nginx/nginx.conf
 architecture: "{{ ansible_facts['architecture'] }}"
 ansible_lsb_codename: "{{ ansible_facts['distribution_major_version'] }}"
 project_path: "/opt/nginx/"
+security_conf_path: "/etc/nginx/nginxconfig.io/"
+general_conf_path: "/etc/nginx/nginxconfig.io/"

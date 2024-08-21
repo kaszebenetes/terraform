@@ -27,6 +27,55 @@
     src: nginx.conf.j2
     dest: "{{ nginx_config_path }}"
 
+- name: Create security.io catalog
+  ansible.builtin.file:
+    path: "{{ security_conf_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Create general  catalog
+  ansible.builtin.file:
+    path: "{{ general_conf_path }}"
+    state: directory
+    mode: '0755'
+
+- stat:
+    path: "{{ security_conf_path }}/security.conf"
+  register: security_file
+
+- stat:
+    path: "{{ general_conf_path }}/general.conf"
+  register: general_file
+
+- name: create file sercure.conf
+  file:
+    path: "{{ security_conf_path }}"
+    state: touch
+    owner: root
+    group: sys
+    mode: 0555
+  when: security_file.stat.exists is defined and not security_file.stat.exists
+
+- name: create file general.conf
+  file:
+    path: "{{ general_conf_path }}"
+    state: touch
+    owner: root
+    group: sys
+    mode: 0555
+  when: general_file.stat.exists is defined and not general_file.stat.exists
+
+
+- name: Copy over templated security.conf
+  ansible.builtin.template:
+    src: security.conf.j2
+    dest: "{{ security_conf_path }}"
+
+- name: Copy over templated general.conf
+  ansible.builtin.template:
+    src: general.conf.j2
+    dest: "{{ general_conf_path }}"
+
 - name: Create project directory on the remote server
   file:
     path: "{{project_path}}"
