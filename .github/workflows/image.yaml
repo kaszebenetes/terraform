@@ -1,0 +1,55 @@
+---
+name: Create and publish a Docker image
+
+on:
+  push:
+    branches: ['feature/docker']
+
+env:
+  IMAGE_NAME: ${{ github.repository }}
+  username: ${{ github.actor }}
+  token: ${{ secrets.TOKEN }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Uninstall conflicting packages
+        run: |
+          for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+      - name: Docker Gpg key
+        run: |
+          sudo apt-get update
+          sudo apt-get install ca-certificates curl
+          sudo install -m 0755 -d /etc/apt/keyrings
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+          sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+      - name: Add Docker APT repository
+        run: |
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+      - name: Update the package index with Docker packages
+        run: sudo apt update
+
+      - name: Install Docker ce
+        run: sudo apt install docker-ce
+
+      - name: Login to container registry
+        run: export CR_PAT = ${{ env.token }} ; echo $CR_PAT | docker login ghcr.io -u ${{ env.username }} --password-stdin
+
+      - name: Build docker image
+        run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:dockerimage
+
+      - name: Push docker image
+        run: docker push ghcr.io/kaszebenetes/terraform:dockerimage
