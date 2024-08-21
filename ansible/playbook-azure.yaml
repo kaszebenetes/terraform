@@ -33,8 +33,9 @@
     #     var: hostvars[inventory_hostname]
   roles:
     - docker
-    - nginx-docker
-    # - nginx-docker-compose
+    # - nginx-docker
+    - nginx-docker-compose
+    - nginx-conf
     # - iptables
 
 # - hosts: loadbalancers
