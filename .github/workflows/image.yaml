@@ -46,7 +46,9 @@ jobs:
         run: sudo apt install docker-ce
 
       - name: Login to container registry
-        run: export CR_PAT = ${{ env.token }} ; echo $CR_PAT | docker login ghcr.io -u ${{ env.username }} --password-stdin
+        run: |
+        export CR_PAT = ${{ env.token }} ; echo $CR_PAT
+        docker login ghcr.io -u ${{ env.username }} --password-stdin
 
       - name: Build docker image
         run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:dockerimage
