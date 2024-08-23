@@ -47,8 +47,8 @@ jobs:
         run: sudo apt install docker-ce
 
       - name: Log in to the Container registry
-          run: |
-            echo "${password}" | docker login -u "${username}" --password-stdi
+        run: |
+          echo "${password}" | docker login -u "${username}" --password-stdi
 
       - name: Build docker image
         run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:feature/docker
