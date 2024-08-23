@@ -47,13 +47,11 @@ jobs:
         run: sudo apt install docker-ce
 
       - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN }}
+          run: |
+            echo "${password}" | docker login -u "${username}" --password-stdi
+
       - name: Build docker image
-        run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:dockerimage
+        run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:feature/docker
 
       - name: Push docker image
-        run: docker push ghcr.io/kaszebenetes/terraform:dockerimage
+        run: docker push ghcr.io/kaszebenetes/terraform:feature/docker
