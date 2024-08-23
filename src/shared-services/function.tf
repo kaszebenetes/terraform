@@ -24,7 +24,7 @@ resource "azurerm_service_plan" "function_srv_plan" {
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app
 resource "azurerm_linux_function_app" "function_app" {
-  name                       = "kaszebe-function-app"
+  name                       = "kaszebe-function-app2"
   resource_group_name        = azurerm_resource_group.rg-tfstates.name
   location                   = azurerm_resource_group.rg-tfstates.location
 
@@ -40,7 +40,7 @@ resource "azurerm_linux_function_app" "function_app" {
     identity_ids = [azurerm_user_assigned_identity.uai.id]
   }
 
-  # zip_deploy_file = data.archive_file.ps_function_package.output_path
+  zip_deploy_file = data.archive_file.ps_function_package.output_path
 
   site_config {
     application_stack {
@@ -67,5 +67,5 @@ resource "azurerm_linux_function_app" "function_app" {
 data "archive_file" "ps_function_package" {
   type = "zip"
   source_dir  = "func/"
-  output_path = "function.zip"
+  output_path = "function2.zip"
 }

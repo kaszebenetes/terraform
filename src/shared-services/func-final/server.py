@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# https://gist.github.com/nitaku/10d0662536f37a087e1b?permalink_comment_id=3375622#gistcomment-3375622
 """An example HTTP server with GET and POST endpoints."""
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
