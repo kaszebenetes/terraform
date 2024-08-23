@@ -3,8 +3,8 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['feature/docker']
-
+    branches: ['*']
+  workflow_dispatch:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-22.04
