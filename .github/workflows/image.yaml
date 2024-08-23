@@ -9,6 +9,8 @@ on:
       tagname:
         required: false
         type: string
+
+# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   TAG_NAME: ${{ inputs.tagname || env.BRANCH_NAME }}
