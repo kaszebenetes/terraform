@@ -3,7 +3,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: ['*']
+    branches: ['**']
   workflow_dispatch:
 jobs:
   build-and-push-image:
