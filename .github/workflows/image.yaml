@@ -5,12 +5,6 @@ on:
   push:
     branches: ['feature/docker']
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  username: ${{ github.actor }}
-  password: ${{ secrets.TOKEN }}
-
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -46,9 +40,18 @@ jobs:
       - name: Install Docker ce
         run: sudo apt install docker-ce
 
-      - name: Log in to the Container registry
+      - name: Log in to GitHub Container Registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          DOCKER_REGISTRY: ghcr.io
+          GITHUB_USERNAME: ${{ github.actor }}
         run: |
-          docker login -u "${username}" "${password}" ${registry}
+          echo "${GITHUB_TOKEN}" | docker login ${DOCKER_REGISTRY} -u "${GITHUB_USERNAME}" --password-stdin
+
+      - name: Verify login
+        run: |
+          docker info | grep "Username"
+
 
       - name: Build docker image
         run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:feature/docker
