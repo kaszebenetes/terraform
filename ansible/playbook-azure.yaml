@@ -29,13 +29,14 @@
   vars:
     bastion_pip: "{{ hostvars['localhost'].bastion_pip }}"
   pre_tasks:
-    - debug:
-        msg: "Provisioning bastions.."
     # - debug:
     #     var: hostvars[inventory_hostname]
   roles:
-    - iptables
-    - nginx
+    - docker
+    # - nginx-docker
+    - nginx-docker-compose
+    - nginx-conf
+    # - iptables
 
 # - hosts: loadbalancers
 #   gather_facts: true
@@ -62,7 +63,7 @@
     # - debug:
     #     var: hostvars[inventory_hostname]
   roles:
-    - iptables
+    # - iptables
 
 
 # - hosts: dnsservers

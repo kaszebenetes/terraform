@@ -1,0 +1,23 @@
+---
+
+# Uncomment if creating custom Dockerfile -->
+
+# - name: Copy Dockerfile to remote server
+#   copy:
+#     src: Dockerfile
+#     dest: "{{ nginx_config_path }}"
+
+#  <---
+
+- name: Copy docker-compose.yml to remote server
+  copy:
+    src: docker-compose.yml
+    dest: "{{project_path}}"
+
+- name: Run Docker Compose
+  shell: docker-compose up -d # --build   # <---Uncoment this arg if want to build custom image
+  args:
+    chdir: "{{ project_path }}"
+
+# - debug:
+#     var: index_file

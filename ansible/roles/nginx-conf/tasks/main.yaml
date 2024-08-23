@@ -1,0 +1,82 @@
+---
+
+- name: Create www catalog
+  ansible.builtin.file:
+    path: "{{ nginx_index_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Create nginx config catalog
+  ansible.builtin.file:
+    path: "{{ nginx_config_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy over templated index.html
+  ansible.builtin.template:
+    # src: "{{ playbook_dir }}/vms/web_config/index.txt"
+    # content: |
+    #   this is text which will be copied over to the destination file
+    src: index.nginx-debian.html
+    dest: "{{ nginx_index_path }}"
+    # remote_src: false
+  register: index_file
+
+- name: Copy over templated nginx.conf
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_config_path }}"
+
+- name: Create security.io catalog
+  ansible.builtin.file:
+    path: "{{ security_conf_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Create general  catalog
+  ansible.builtin.file:
+    path: "{{ general_conf_path }}"
+    state: directory
+    mode: '0755'
+
+- stat:
+    path: "{{ security_conf_path }}/security.conf"
+  register: security_file
+
+- stat:
+    path: "{{ general_conf_path }}/general.conf"
+  register: general_file
+
+- name: create file sercure.conf
+  file:
+    path: "{{ security_conf_path }}"
+    state: touch
+    owner: root
+    group: sys
+    mode: 0555
+  when: security_file.stat.exists is defined and not security_file.stat.exists
+
+- name: create file general.conf
+  file:
+    path: "{{ general_conf_path }}"
+    state: touch
+    owner: root
+    group: sys
+    mode: 0555
+  when: general_file.stat.exists is defined and not general_file.stat.exists
+
+
+- name: Copy over templated security.conf
+  ansible.builtin.template:
+    src: security.conf.j2
+    dest: "{{ security_conf_path }}"
+
+- name: Copy over templated general.conf
+  ansible.builtin.template:
+    src: general.conf.j2
+    dest: "{{ general_conf_path }}"
+
+- name: Create project directory on the remote server
+  file:
+    path: "{{project_path}}"
+    state: directory

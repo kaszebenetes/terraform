@@ -1,0 +1,46 @@
+---
+
+# In case of use custom dockerfile , uncomment =======>
+
+# - name: Copy Dockerfile to remote server
+#   copy:
+#     src: ./templates/Dockerfile
+#     dest: "{{project_path}}"
+
+# - name: Build image using cache source
+#   docker_image:
+#     name: web
+#     build:
+#       path: "{{project_path}}"
+#       dockerfile: Dockerfile
+#     source: build
+
+#  <===================
+
+#
+- name: Pulling image from GHCR
+  docker_image:
+    name: kaszebenetes/terraform:feature-docker
+    source: pull
+    platform: https://ghcr.io
+
+- name: Check if container is running
+  shell: docker ps | grep "kobenginx"
+  register: container_check
+  ignore_errors: yes
+
+- name: Uruchom kontener
+  docker_container:
+    name: kobenginx
+    image: kaszebenetes/terraform:feature-docker
+    # Dodaj tutaj dodatkowe opcje uruchamiania kontenera, np. porty, wolumeny
+    ports:
+      - "80:80"
+    volumes:
+      - /var/www/html:/var/www/html
+
+# - name: Run Docker
+#   shell: docker run -d --name webserver -p 8080:80 -v /var/www/html:/var/www/html kobenginx
+#   args:
+#     chdir: "{{project_path}}"
+#   when: container_check.rc != 0
