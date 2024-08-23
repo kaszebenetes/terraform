@@ -48,7 +48,7 @@ jobs:
 
       - name: Log in to the Container registry
         run: |
-          echo "${password}" | docker login -u "${username}" -p --password-stdin
+          docker login -u "${username}" "${password}" ${registry}
 
       - name: Build docker image
         run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:feature/docker
