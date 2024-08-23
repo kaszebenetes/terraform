@@ -54,7 +54,7 @@ jobs:
 
 
       - name: Build docker image
-        run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:feature/docker
+        run: docker build ./ansible/roles/nginx-docker/templates/ -t ghcr.io/kaszebenetes/terraform:feature_docker
 
       - name: Push docker image
-        run: docker push ghcr.io/kaszebenetes/terraform:feature/docker
+        run: docker push ghcr.io/kaszebenetes/terraform:feature_docker
